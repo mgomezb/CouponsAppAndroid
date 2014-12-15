@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tutorial_pager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="30dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/skip_where_are_you"
+            android:textColor="@drawable/wifi_button_skip"
+            android:background="@color/transparent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/button"
+            android:gravity="center"
+            android:padding="5dp"/>
+
+        <com.viewpagerindicator.CirclePageIndicator
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/tutorial_indicator"
+            app:strokeColor="@color/tutorial_circle"
+            app:fillColor="@color/tutorial_circle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:padding="5dp"/>
+    </RelativeLayout>
+
+</RelativeLayout>

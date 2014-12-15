@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/background_lot_legal"
+    xmlns:switchpref="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/configurations_message"
+        android:id="@+id/textView"
+        android:gravity="center"
+        android:padding="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/switch_layout_style"
+        android:id="@+id/relativeLayout"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/textView">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/general_information"
+            android:id="@+id/textView2"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/information_switch" />
+
+        <org.jraf.android.backport.switchwidget.Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/information_switch"
+            android:layout_centerVertical="true"
+            android:checked="true"
+            android:layout_alignParentRight="true"
+            style="@style/switch_style"
+            switchpref:thumb="@drawable/switch_configurations"
+            switchpref:track="@drawable/switch_background"
+            switchpref:textOn="@string/switch_on"
+            switchpref:textOff="@string/switch_off"
+            switchpref:switchMinWidth="56dp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/switch_layout_style"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/relativeLayout2">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/all_categories"
+            android:id="@+id/textView3"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/all_category_switch" />
+
+        <org.jraf.android.backport.switchwidget.Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/all_category_switch"
+            android:checked="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            style="@style/switch_style"
+            switchpref:thumb="@drawable/switch_configurations"
+            switchpref:track="@drawable/switch_background"
+            switchpref:textOn="@string/switch_on"
+            switchpref:textOff="@string/switch_off"
+            switchpref:switchMinWidth="56dp"/>
+    </RelativeLayout>
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listView"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/relativeLayout2" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_alignTop="@+id/listView"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

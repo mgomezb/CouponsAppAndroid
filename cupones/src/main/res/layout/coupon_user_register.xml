@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_coupon_image">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:background="@color/white"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/tutorial_message"
+                android:text="@string/register_title"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/textView" />
+
+            <com.facebook.widget.LoginButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:login_text="@string/button_face"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/facebookLogin"
+                android:layout_below="@+id/textView" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:padding="20dp">
+
+
+            <com.mgomez.cuponesmemoria.views.FloatLabeledEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:floatingHint="Nombre"
+                android:lines="1"
+                android:id="@+id/name" />
+
+            <com.mgomez.cuponesmemoria.views.FloatLabeledEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:floatingHint="Apellido"
+                android:lines="1"
+                android:id="@+id/last_name" />
+
+            <com.mgomez.cuponesmemoria.views.FloatLabeledEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:floatingHint="RUT"
+                android:lines="1"
+                android:inputType="number"
+                android:id="@+id/rut" />
+
+            <com.mgomez.cuponesmemoria.views.FloatLabeledEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:floatingHint="E-mail"
+                android:inputType="textEmailAddress"
+                android:lines="1"
+                android:id="@+id/email" />
+
+            <com.mgomez.cuponesmemoria.views.FloatLabeledAutoComplete
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:floatingHint="Comuna"
+                android:lines="1"
+                android:id="@+id/address" />
+
+            <com.mgomez.cuponesmemoria.views.FloatLabeledEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:floatingHint="Género"
+                android:lines="1"
+                android:id="@+id/genre" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registrar"
+                android:id="@+id/button_register"
+                android:textColor="@color/white"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/right_dialog_button"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

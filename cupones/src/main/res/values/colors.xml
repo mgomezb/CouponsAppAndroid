@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="overlay">#e9343232</color>
+
+    <color name="map_control_border">#f3f5f7</color>
+    <color name="map_control_background">#333333</color>
+    <color name="map_control_active">#d6494d</color>
+
+    <color name="background_store">#F7F2E0</color>
+    <color name="description_store">#737373</color>
+    <color name="background_cell">#F0F0F0</color>
+    <color name="divider_cell">#D5D5D5</color>
+    <color name="text_cell">#545454</color>
+    <color name="initial_menu_title">#C0BFBF</color>
+    <color name="initial_menu_description">#A9A9A9</color>
+    <color name="arrive_text_button">#FFF8D8</color>
+    <color name="divider_cell_menu">#3d3d3d</color>
+    <color name="gray">#343434</color>
+    <color name="menu_background">#343233</color>
+    <color name="menu_divider">#534f51</color>
+    <color name="black">#000000</color>
+    <color name="light_blue">#687e85</color>
+
+    <color name="button_recreate_normal">#CA342D</color>
+    <color name="button_recreate_pressed">#A42A25</color>
+
+    <color name="input_bg">#f7f7f7</color>
+    <color name="input_border">#a9a9a9</color>
+    <color name="input_font">#929090</color>
+
+    <color name="info_menu_background">#f6f6f6</color>
+    <color name="info_menu_button">#DBDBDB</color>
+    <color name="info_menu_title">#383838</color>
+    <color name="info_menu_subtitle">#6f6f6f</color>
+    <color name="info_menu_text">#333333</color>
+
+    <color name="action_menu_hint">#ddd</color>
+    <color name="action_menu_option_disabled">#5a5a5a</color>
+    <color name="action_menu_search_highlight">#3dc1ff</color>
+    <color name="action_menu_locate_highlight">#ff707c</color>
+
+    <color name="disabled_menu_action">@color/menu_divider</color>
+    <color name="white">#FFFFFF</color>
+    <color name="arauco_red">#CE303F</color>
+    <color name="backgroud_red">#d94a4e</color>
+    <color name="backgroud_green">#60b35d</color>
+    <color name="backgroud_blue">#1e7ba8</color>
+    <color name="bottom_panel_bar_bg">#525357</color>
+    <color name="interest_point_name_button_normal">#e6e6e6</color>
+    <color name="interest_point_name_button_activated">#aaaaaa</color>
+    <color name="get_there_button_background_normal">#166B94</color>
+    <color name="get_there_button_background_activated">#aaaaaa</color>
+    <color name="get_there_button_background_disabled">#aaaaaa</color>
+    <color name="loading_background">#bb000000</color>
+    <color name="click_share">#E9E9EA</color>
+    <color name="left_button_dialog_normal">#e0e0e0</color>
+    <color name="left_button_dialog_state">#aaaaaa</color>
+    <color name="right_dialog_button_state">#D44B4A</color>
+    <color name="right_dialog_button_normal">#f35d4d</color>
+    <color name="line_share">#CFD1D2</color>
+    <color name="color_link">#1E7CA7</color>
+    <color name="background_menu_my_car">#4A9C48</color>
+    <color name="title_my_car">#65B34E</color>
+    <color name="title_search">#2779AA</color>
+    <color name="background_search_button">#166B94</color>
+    <color name="title_autolocation">#D44B4A</color>
+    <color name="text_disable">#343437</color>
+    <color name="background_autolocation_disable">#1c191b</color>
+    <color name="background_autolocation">#CF4346</color>
+    <color name="my_car_pressed">#5EC85D</color>
+    <color name="search_text_pressed">#51ADDF</color>
+    <color name="autolocation_text_pressed">#FF777A</color>
+    <color name="color_text_menu">#FFFFFF</color>
+
+    <color name="progress_start">#fa8882</color>
+    <color name="progress_end">#af0d06</color>
+
+    <color name="wifi_title">#ffffff</color>
+    <color name="wifi_text">#878383</color>
+    <color name="wifi_enabled">#007DA0</color>
+    <color name="wifi_enabled_active">#ff005371</color>
+    <color name="wifi_skip_active">#ff524e4e</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="background_splash_start">#343232</color>
+    <color name="background_splash_end">#000000</color>
+
+    <color name="autolocation_red">#D44B4A</color>
+    <color name="background_title_item_coupon">#CFFFFFFF</color>
+    <color name="background_lot_legal">#E5E5E5</color>
+    <color name="background_lot">#F5F5F5</color>
+    <color name="text_color_lot">#54A9CD</color>
+
+    <color name="search_button_color">#E44E4C</color>
+    <color name="search_button_color_pressed">#C6251F</color>
+
+    <color name="tutorial_title">#706F6F</color>
+    <color name="tutorial_message">#706F6F</color>
+    <color name="tutorial_circle">#E44E4C</color>
+
+    <color name="background_coupon_image">#e3e1d6</color>
+
+    <color name="button_info_coupon">#d7d5cc</color>
+
+    <color name="background_instructions">#EC665C</color>
+
+    <color name="title_notifications_no_read">#1D1D1B</color>
+    <color name="message_notifications_no_read">#706F6F</color>
+    <color name="date_notifications_no_read">#B2B2B2</color>
+
+    <color name="background_notifications_read">#F6F6F6</color>
+    <color name="title_notifications_read">#B2B2B2</color>
+    <color name="message_notifications_read">#C6C6C6</color>
+    <color name="date_notifications_read">#DADADA</color>
+
+    <color name="switch_activated">#5DB23E</color>
+    <color name="switch_desactivated">#DADADA</color>
+    <color name="switch_border">#b2b2b2</color>
+
+</resources>

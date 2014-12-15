@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/title"
+            android:text="25% off en Algo"
+            android:textSize="18dp"
+            android:textColor="@color/tutorial_title"
+            android:textStyle="bold"
+            android:padding="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/tutorial_message"
+            android:padding="10dp"
+            android:text="@string/subtitle_claim_coupon"
+            android:id="@+id/subtitle_claim_coupon" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center">
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:inputType="numberPassword"
+                android:gravity="center"
+                android:maxLength="1"
+                android:lines="1"
+                android:background="@drawable/background_edittext_get_coupons"
+                android:ems="10"
+                android:id="@+id/editText1" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:inputType="numberPassword"
+                android:maxLength="1"
+                android:gravity="center"
+                android:background="@drawable/background_edittext_get_coupons"
+                android:ems="10"
+                android:id="@+id/editText2" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:maxLength="1"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:background="@drawable/background_edittext_get_coupons"
+                android:ems="10"
+                android:id="@+id/editText3" />
+
+            <EditText
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:maxLength="1"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:background="@drawable/background_edittext_get_coupons"
+                android:ems="10"
+                android:id="@+id/editText4" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="Listo!"
+        android:background="@drawable/search_button_red"
+        android:id="@+id/button" />
+
+</LinearLayout>

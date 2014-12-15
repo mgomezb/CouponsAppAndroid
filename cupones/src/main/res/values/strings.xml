@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">Coupons</string>
+    <string name="preferences_file">com.mgomez.cuponmemoria.preferencesfile</string>
+    <string name="coupons_title">Cupones</string>
+    <string name="coupons_button">MIS CUPONES</string>
+    <string name="coupons">MIS CUPONES</string>
+    <string name="register">REGISTRO</string>
+    <string name="notifications">NOTIFICACIONES</string>
+    <string name="configuration">CONFIGURACIÓN</string>
+
+    <string name="configurations">Configuraciones</string>
+
+    <string name="title_tuto_0">Bienvenido a cupones Arauco Mapps</string>
+    <string name="message_tuto_0"> Con sencillos pasos podrás disfrutar de cientos de descuentos y promociones, que llegarán a tu celular cuando pases cerca de ellos en el mall.</string>
+    <string name="title_tuto_1">1- Regístrate</string>
+    <string name="message_tuto_1">A través de facebook, o de modo manual.\nIngresa unos pocos datos y listo.</string>
+    <string name="title_tuto_2">2- Recíbelos</string>
+    <string name="message_tuto_2"> ¡Al caminar por el mall te llegarán increíbles cupones!\nPodrás revisarlos directamente en la opción cupones del menú principal.</string>
+    <string name="title_tuto_3">3- Canjéalos</string>
+    <string name="message_tuto_3">Dirígete a la tienda o servicio al cliente indicado en el cupón y presiona canjear.\nEl encargado introducirá la clave para hacerlo válido.\n¡A disfrutar!</string>
+    <string name="finish">Finalizar</string>
+
+    <string name="claim_coupon">CANJEAR CUPÓN</string>
+    <string name="coupon_claimed">CUPÓN CANJEADO</string>
+    <string name="coupon_no_claimable">YA ESTÁS PARTICIPANDO</string>
+    <string name="terms_and_conditions">Términos y condiciones</string>
+
+    <string name="subtitle_claim_coupon">El encargado de la tienda anotará una clave secreta para validar el cupón.</string>
+    <string name="register_message">Para canjear tus cupones necesitamos que ingreses tus datos.</string>
+    <string name="configurations_message">Acá puedes habilitar las notificaciones que te enviaremos, ya sea sobre información general de Parque Arauco o cupones de nuestras tiendas.</string>
+    <string name="general_information">INFORMACIÓN GENERAL</string>
+    <string name="all_categories">CUPONES: TODAS LAS CATEGORÍAS</string>
+
+    <string name="show_store">Ver tienda en el mapa</string>
+    <string name="register_title">Precompleta el formulario usando facebook o rellenalo manualmente y disfruta de todos los cupones que Parque Arauco tiene para tí.</string>
+    <string name="button_face">Conectar con Facebook</string>
+
+    <string name="skip_where_are_you">Omitir</string>
+
+    <string name="coupon_date_end">Cupón válido hasta el</string>
+    <string name="loading_data">Cargando datos...</string>
+
+    <string name="rut_error">RUT Inválido"</string>
+    <string name="email_error">E-mail Inválido"</string>
+    <string name="error_empty">Campo Obligatorio!</string>
+    <string name="validating">Validando cupón...</string>
+    <string name="register_done">Registro exitoso!</string>
+    <string name="register_error">Problemas al intentar registrar, Reintente!</string>
+    <string name="registering">Registrando usuario...</string>
+    <string name="not_show_more">No mostrar más</string>
+    <string name="welcome_pak">Bienvenido a Parque Arauco!</string>
+    <string name="welcome_pak_text">No olvides encender tu bluetooth para recibir beneficios y descuentos con Arauco Mapps.</string>
+    <string name="ok_where_are_you">Ok</string>
+    <string name="coupon_validate">Cupón validado!</string>
+    <string name="coupon_validate_error">Problemas al intentar validar el cupón, Reintente!</string>
+    <string name="coupon_validate_code_error">Código erróneo, Reintente!</string>
+    <string name="male">Masculino</string>
+    <string name="fale">Femenino</string>
+
+
+</resources>
