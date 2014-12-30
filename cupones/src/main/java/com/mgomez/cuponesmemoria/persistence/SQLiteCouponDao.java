@@ -5,14 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import static android.provider.BaseColumns._ID;
-
-import com.mgomez.cuponesmemoria.model.Alert;
 import com.mgomez.cuponesmemoria.model.BeaconNotification;
 import com.mgomez.cuponesmemoria.model.Coupon;
+import com.mgomez.cuponesmemoria.model.Notification;
 import com.mgomez.cuponesmemoria.utilities.Utils;
 import com.radiusnetworks.ibeacon.IBeacon;
 import com.mgomez.cuponesmemoria.Constants.DB;
+import static android.provider.BaseColumns._ID;
+
+
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -56,29 +57,45 @@ public class SQLiteCouponDao implements CouponDao {
         }
     }
 
+    @Override
+    public void insertCoupons(List<Coupon> coupons) {
+        for(Coupon c: coupons){
+            insertCoupon(c);
+        }
+    }
+
     private void insertBeacon(BeaconNotification beaconNotification) {
         ContentValues values = new ContentValues();
         values.put(DB.ID, beaconNotification.getId());
-        values.put(DB.X, beaconNotification.getX());
-        values.put(DB.Y, beaconNotification.getY());
-        values.put(DB.FLOOR_ID, beaconNotification.getFloor_id());
         values.put(DB.MAYOR, beaconNotification.getMayor());
         values.put(DB.MINOR, beaconNotification.getMinor());
         values.put(DB.PROXIMITY_UUID, beaconNotification.getProximity_uuid());
 
         db.insert(DB.BEACONS_TABLE, null, values);
 
-        insertRelationBeaconsCoupons(beaconNotification.getId(), beaconNotification.getCoupons_ids());
-        insertRelationBeaconsAlerts(beaconNotification.getId(), beaconNotification.getAlerts_ids());
+       insertRelationBeaconsCoupons(beaconNotification.getId(), beaconNotification.getCoupons_ids());
+       insertRelationBeaconsNotifications(beaconNotification.getId(), beaconNotification.getNotifications_ids());
     }
 
-    @Override
-    public void insertCoupons(List<Coupon> coupons){
-
-        for(Coupon c: coupons){
-            insertCoupon(c);
+    private void insertRelationBeaconsCoupons(long idBeacons, int[] idsCoupons) {
+        for(int i =0; i < idsCoupons.length; i++) {
+            ContentValues values = new ContentValues();
+            values.put(DB.BEACON_ID, idBeacons);
+            values.put(DB.COUPON_ID, idsCoupons[i]);
+            db.insert(DB.BEACONS_COUPONS_TABLE, null, values);
         }
     }
+
+    private void insertRelationBeaconsNotifications(long idBeacons, int[] idsNotifications) {
+        for(int i =0; i < idsNotifications.length; i++) {
+            ContentValues values = new ContentValues();
+            values.put(DB.BEACON_ID, idBeacons);
+            values.put(DB.NOTIFICATION_ID, idsNotifications[i]);
+            db.insert(DB.BEACONS_NOTIFICATIONS_TABLE, null, values);
+        }
+    }
+
+
 
     private void insertCoupon(Coupon c) {
 
@@ -92,18 +109,18 @@ public class SQLiteCouponDao implements CouponDao {
         values.put(DB.TITLE, c.getTitle());
         values.put(DB.MESSAGE, c.getMessage());
         values.put(DB.ACCESS_LEVEL, c.getAccess_level());
-        values.put(DB.STORE_CATEGORY_ID, c.getStore_category_id());
-        values.put(DB.INTEREST_POINT_ID, c.getInterest_point_id());
         values.put(DB.PROXIMITY_TRIGGER_RANGE, c.getProximity_trigger_range());
-        values.put(DB.IMAGE, c.getImage());
+        values.put(DB.IMAGE, c.getImage_url());
         values.put(DB.CODE, c.getCode());
         values.put(DB.INIT_DATE, c.getInit_date());
         values.put(DB.END_DATE, c.getEnd_date());
         values.put(DB.LEGAL, c.getLegal());
         values.put(DB.AGGREGATED, 0);
-        values.put(DB.CLAIMABLE, (c.isClaimable() ? 1 : 0));
         values.put(DB.INSTRUCTIONS, c.getUse_instructions());
         values.put(DB.STOCK, c.getStock());
+        values.put(DB.STORE_NAME, c.getStore_name());
+        values.put(DB.CATEGORY_ID, c.getCategory());
+        values.put(DB.STORE_ID, c.getStore_id());
 
         db.insert(DB.COUPONS_TABLE, null, values);
     }
@@ -117,18 +134,18 @@ public class SQLiteCouponDao implements CouponDao {
         values.put(DB.TITLE, c.getTitle());
         values.put(DB.MESSAGE, c.getMessage());
         values.put(DB.ACCESS_LEVEL, c.getAccess_level());
-        values.put(DB.STORE_CATEGORY_ID, c.getStore_category_id());
-        values.put(DB.INTEREST_POINT_ID, c.getInterest_point_id());
         values.put(DB.PROXIMITY_TRIGGER_RANGE, c.getProximity_trigger_range());
-        values.put(DB.IMAGE, c.getImage());
+        values.put(DB.IMAGE, c.getImage_url());
         values.put(DB.CODE, c.getCode());
         values.put(DB.INIT_DATE, c.getInit_date());
         values.put(DB.END_DATE, c.getEnd_date());
         values.put(DB.LEGAL, c.getLegal());
         values.put(DB.CLAIMED, 0);
-        values.put(DB.CLAIMABLE, (c.isClaimable() ? 1 : 0));
         values.put(DB.INSTRUCTIONS, c.getUse_instructions());
         values.put(DB.STOCK, c.getStock());
+        values.put(DB.STORE_NAME, c.getStore_name());
+        values.put(DB.CATEGORY_ID, c.getCategory());
+        values.put(DB.STORE_ID, c.getStore_id());
 
         db.insert(DB.MY_COUPONS_TABLE, null, values);
 
@@ -138,66 +155,55 @@ public class SQLiteCouponDao implements CouponDao {
     }
 
     @Override
-    public void insertAlerts(List<Alert> alerts){
-        for(Alert a: alerts){
-            insertAlert(a);
+    public void insertNotifications(List<Notification> notifications){
+        for(Notification n: notifications){
+            insertNotification(n);
         }
     }
 
-    private void insertAlert(Alert alert) {
+    private void insertNotification(Notification notification) {
+
+        if(notification.getAccess_level().equals(Coupon.Types.PUBLIC.toString())) {
+            if(!existCoupon(notification.getId()))
+                insertMyNotification(notification);
+        }
+
         ContentValues values = new ContentValues();
-        values.put(DB.ID, alert.getId());
-        values.put(DB.TITLE, alert.getTitle());
-        values.put(DB.MESSAGE, alert.getMessage());
-        values.put(DB.PROXIMITY_TRIGGER_RANGE, alert.getProximity_trigger_range());
-        values.put(DB.INIT_DATE, alert.getInit_date());
-        values.put(DB.END_DATE, alert.getEnd_date());
+        values.put(DB.ID, notification.getId());
+        values.put(DB.TITLE, notification.getTitle());
+        values.put(DB.MESSAGE, notification.getMessage());
+        values.put(DB.PROXIMITY_TRIGGER_RANGE, notification.getProximity_trigger_range());
+        values.put(DB.INIT_DATE, notification.getInit_date());
+        values.put(DB.END_DATE, notification.getEnd_date());
         values.put(DB.AGGREGATED, 0);
-        values.put(DB.TYPE, Alert.Types.ALERT.toString());
+        values.put(DB.ACCESS_LEVEL, notification.getAccess_level());
 
         db.insert(DB.NOTIFICATION_TABLE, null, values);
 
     }
 
     @Override
-    public void insertMyAlert(Alert alert) {
-
+    public void insertMyNotification(Notification notification) {
 
         ContentValues values = new ContentValues();
-        values.put(DB.ID, alert.getId());
-        values.put(DB.TITLE, alert.getTitle());
-        values.put(DB.MESSAGE, alert.getMessage());
-        values.put(DB.PROXIMITY_TRIGGER_RANGE, alert.getProximity_trigger_range());
-        values.put(DB.INIT_DATE, alert.getInit_date());
-        values.put(DB.END_DATE, alert.getEnd_date());
+        values.put(DB.ID, notification.getId());
+        values.put(DB.TITLE, notification.getTitle());
+        values.put(DB.MESSAGE, notification.getMessage());
+        values.put(DB.PROXIMITY_TRIGGER_RANGE, notification.getProximity_trigger_range());
+        values.put(DB.INIT_DATE, notification.getInit_date());
+        values.put(DB.END_DATE, notification.getEnd_date());
         values.put(DB.READ, 0);
-        values.put(DB.TYPE, Alert.Types.ALERT.toString());
+        values.put(DB.ACCESS_LEVEL, notification.getAccess_level());
         values.put(DB.RECEIVED_DATE, new DateTime().withTimeAtStartOfDay().getMillis());
 
         db.insert(DB.MY_NOTIFICATION_TABLE, null, values);
 
 
-        setAggregateAlert(alert.getId());
+        setAggregateNotification(notification.getId());
 
     }
 
-    private void insertRelationBeaconsCoupons(long idBeacons, int[] idsCoupons) {
-        for(int i =0; i < idsCoupons.length; i++) {
-            ContentValues values = new ContentValues();
-            values.put(DB.BEACON_ID, idBeacons);
-            values.put(DB.COUPON_ID, idsCoupons[i]);
-            db.insert(DB.BEACONS_COUPONS_TABLE, null, values);
-        }
-    }
 
-    private void insertRelationBeaconsAlerts(long idBeacons, int[] idsAlerts) {
-        for(int i =0; i < idsAlerts.length; i++) {
-            ContentValues values = new ContentValues();
-            values.put(DB.BEACON_ID, idBeacons);
-            values.put(DB.ALERT_ID, idsAlerts[i]);
-            db.insert(DB.BEACONS_ALERTS_TABLE, null, values);
-        }
-    }
 
     @Override
     public synchronized ArrayList<BeaconNotification> getBeaconNotifications(){
@@ -240,9 +246,6 @@ public class SQLiteCouponDao implements CouponDao {
 
     private BeaconNotification createEntityBeaconNotification(Cursor row) {
         return new BeaconNotification(row.getLong(row.getColumnIndexOrThrow(DB.ID)),
-                row.getInt(row.getColumnIndexOrThrow(DB.X)),
-                row.getInt(row.getColumnIndexOrThrow(DB.Y)),
-                row.getInt(row.getColumnIndexOrThrow(DB.FLOOR_ID)),
                 row.getInt(row.getColumnIndexOrThrow(DB.MAYOR)),
                 row.getInt(row.getColumnIndexOrThrow(DB.MINOR)),
                 row.getString(row.getColumnIndexOrThrow(DB.PROXIMITY_UUID))
@@ -284,21 +287,38 @@ public class SQLiteCouponDao implements CouponDao {
     }
 
     @Override
-    public synchronized ArrayList<Alert> getMyAlerts(){
+    public synchronized ArrayList<Notification> getMyNotifications(){
 
-        ArrayList<Alert> alerts = new ArrayList<Alert>();
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
 
 
         Cursor c = db.query(DB.MY_NOTIFICATION_TABLE, null, null, null, null,null,_ID+" DESC");
         if(c.moveToFirst()) {
             do{
-                alerts.add(createEntityMyAlert(c));
+                notifications.add(createEntityMyNotification(c));
             }while (c.moveToNext());
         }
         c.close();
 
-        return alerts;
+        return notifications;
     }
+
+    @Override
+    public ArrayList<Notification> getNotificationsVisibles() {
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
+
+
+        Cursor c = db.query(DB.COUPONS_TABLE, null, DB.VISIBLE+" =?", new String[]{"1"}, null,null,null);
+        if(c.moveToFirst()) {
+            do{
+                notifications.add(createEntityNotification(c));
+            }while (c.moveToNext());
+        }
+        c.close();
+
+        return notifications;
+    }
+
 
     private Coupon createEntityCoupon(Cursor row) {
         return new Coupon(row.getLong(row.getColumnIndexOrThrow(DB.ID)),
@@ -308,15 +328,16 @@ public class SQLiteCouponDao implements CouponDao {
                 row.getString(row.getColumnIndexOrThrow(DB.END_DATE)),
                 row.getString(row.getColumnIndexOrThrow(DB.ACCESS_LEVEL)),
                 row.getString(row.getColumnIndexOrThrow(DB.LEGAL)),
-                row.getLong(row.getColumnIndexOrThrow(DB.STORE_CATEGORY_ID)),
-                row.getLong(row.getColumnIndexOrThrow(DB.INTEREST_POINT_ID)),
                 row.getInt(row.getColumnIndexOrThrow(DB.PROXIMITY_TRIGGER_RANGE)),
                 row.getString(row.getColumnIndexOrThrow(DB.IMAGE)),
                 row.getString(row.getColumnIndexOrThrow(DB.CODE)),
+                row.getInt(row.getColumnIndexOrThrow(DB.STOCK)),
+                row.getInt(row.getColumnIndexOrThrow(DB.STORE_ID)),
+                row.getInt(row.getColumnIndexOrThrow(DB.CATEGORY_ID)),
+                row.getString(row.getColumnIndexOrThrow(DB.STORE_NAME)),
                 row.getInt(row.getColumnIndexOrThrow(DB.AGGREGATED))!=0,
-                row.getInt(row.getColumnIndexOrThrow(DB.CLAIMABLE))!=0,
-                row.getString(row.getColumnIndexOrThrow(DB.INSTRUCTIONS)),
-                row.getInt(row.getColumnIndexOrThrow(DB.STOCK))
+                row.getString(row.getColumnIndexOrThrow(DB.INSTRUCTIONS))
+
         );
     }
 
@@ -328,58 +349,30 @@ public class SQLiteCouponDao implements CouponDao {
                 row.getString(row.getColumnIndexOrThrow(DB.END_DATE)),
                 row.getString(row.getColumnIndexOrThrow(DB.ACCESS_LEVEL)),
                 row.getString(row.getColumnIndexOrThrow(DB.LEGAL)),
-                row.getLong(row.getColumnIndexOrThrow(DB.STORE_CATEGORY_ID)),
-                row.getLong(row.getColumnIndexOrThrow(DB.INTEREST_POINT_ID)),
                 row.getInt(row.getColumnIndexOrThrow(DB.PROXIMITY_TRIGGER_RANGE)),
                 row.getString(row.getColumnIndexOrThrow(DB.IMAGE)),
                 row.getString(row.getColumnIndexOrThrow(DB.CODE)),
+                row.getInt(row.getColumnIndexOrThrow(DB.STOCK)),
+                row.getInt(row.getColumnIndexOrThrow(DB.STORE_ID)),
+                row.getInt(row.getColumnIndexOrThrow(DB.CATEGORY_ID)),
+                row.getString(row.getColumnIndexOrThrow(DB.STORE_NAME)),
                 row.getInt(row.getColumnIndexOrThrow(DB.CLAIMED))!=0,
-                row.getInt(row.getColumnIndexOrThrow(DB.CLAIMABLE))!=0,
-                row.getString(row.getColumnIndexOrThrow(DB.INSTRUCTIONS)),
-                row.getInt(row.getColumnIndexOrThrow(DB.STOCK))
+                row.getString(row.getColumnIndexOrThrow(DB.INSTRUCTIONS))
         );
     }
 
-    @Override
-    public synchronized ArrayList<Alert> getAlertsVisibles(){
 
-        ArrayList<Alert> alerts = new ArrayList<Alert>();
+    private Notification createEntityMyNotification(Cursor row) {
 
-
-        Cursor c = db.query(DB.COUPONS_TABLE, null, DB.VISIBLE+" =?", new String[]{"1"}, null,null,null);
-        if(c.moveToFirst()) {
-            do{
-                alerts.add(createEntityAlert(c));
-            }while (c.moveToNext());
-        }
-        c.close();
-
-        return alerts;
-    }
-
-    private Alert createEntityAlert(Cursor row) {
-        return new Alert(row.getLong(row.getColumnIndexOrThrow(DB.ID)),
+        return new Notification(row.getLong(row.getColumnIndexOrThrow(DB.ID)),
                 row.getString(row.getColumnIndexOrThrow(DB.TITLE)),
                 row.getString(row.getColumnIndexOrThrow(DB.MESSAGE)),
                 row.getInt(row.getColumnIndexOrThrow(DB.PROXIMITY_TRIGGER_RANGE)),
                 row.getString(row.getColumnIndexOrThrow(DB.INIT_DATE)),
                 row.getString(row.getColumnIndexOrThrow(DB.END_DATE)),
-                row.getInt(row.getColumnIndexOrThrow(DB.AGGREGATED))!=0,
-                row.getString(row.getColumnIndexOrThrow(DB.TYPE))
-        );
-    }
-
-    private Alert createEntityMyAlert(Cursor row) {
-
-        return new Alert(row.getLong(row.getColumnIndexOrThrow(DB.ID)),
-                row.getString(row.getColumnIndexOrThrow(DB.TITLE)),
-                row.getString(row.getColumnIndexOrThrow(DB.MESSAGE)),
-                row.getInt(row.getColumnIndexOrThrow(DB.PROXIMITY_TRIGGER_RANGE)),
-                row.getString(row.getColumnIndexOrThrow(DB.INIT_DATE)),
-                row.getString(row.getColumnIndexOrThrow(DB.END_DATE)),
+                row.getString(row.getColumnIndexOrThrow(DB.ACCESS_LEVEL)),
                 row.getInt(row.getColumnIndexOrThrow(DB.READ))!=0,
                 true,
-                row.getString(row.getColumnIndexOrThrow(DB.TYPE)),
                 row.getLong(row.getColumnIndexOrThrow(DB.RECEIVED_DATE))
         );
     }
@@ -390,9 +383,9 @@ public class SQLiteCouponDao implements CouponDao {
         ArrayList<Coupon> coupons = new ArrayList<Coupon>();
 
         final String sql = "select C."+DB.ID+" as "+DB.ID+", C."+DB.TITLE+" as "+DB.TITLE+", C."+DB.MESSAGE+" as "+DB.MESSAGE+", C."+DB.INIT_DATE+" as "+DB.INIT_DATE+", " +
-                "C."+DB.END_DATE+" as "+DB.END_DATE+", C."+DB.ACCESS_LEVEL+" as "+DB.ACCESS_LEVEL+", C."+DB.LEGAL+" as "+DB.LEGAL+", C."+DB.STORE_CATEGORY_ID+" as "+DB.STORE_CATEGORY_ID+", " +
-                "C."+DB.INTEREST_POINT_ID+" as "+DB.INTEREST_POINT_ID+", C."+DB.PROXIMITY_TRIGGER_RANGE+" as "+DB.PROXIMITY_TRIGGER_RANGE+", C."+DB.IMAGE+" as "+DB.IMAGE+", " +
-                "C."+DB.CODE+" as "+DB.CODE+", C."+DB.AGGREGATED+" as "+DB.AGGREGATED+", C."+DB.CLAIMABLE+" as "+DB.CLAIMABLE+", C."+DB.INSTRUCTIONS+" as "+DB.INSTRUCTIONS+" " +
+                "C."+DB.END_DATE+" as "+DB.END_DATE+", C."+DB.ACCESS_LEVEL+" as "+DB.ACCESS_LEVEL+", C."+DB.LEGAL+" as "+DB.LEGAL+", C."+DB.CATEGORY_ID+" as "+DB.CATEGORY_ID+", " +
+                "C."+DB.STORE_ID+" as "+DB.STORE_ID+", C."+DB.PROXIMITY_TRIGGER_RANGE+" as "+DB.PROXIMITY_TRIGGER_RANGE+", C."+DB.IMAGE+" as "+DB.IMAGE+", " +
+                "C."+DB.CODE+" as "+DB.CODE+", C."+DB.AGGREGATED+" as "+DB.AGGREGATED+", C."+DB.STORE_NAME+" as "+DB.STORE_NAME+", C."+DB.INSTRUCTIONS+" as "+DB.INSTRUCTIONS+" " +
                 ", C."+DB.STOCK+" as "+DB.STOCK+" " + "from "+DB.COUPONS_TABLE+" as C " +
                 "JOIN "+DB.BEACONS_COUPONS_TABLE+" as CB ON C."+DB.ID+" = CB."+DB.COUPON_ID+" " +
                 "JOIN "+DB.BEACONS_TABLE+" as B ON B."+DB.ID+" = CB."+DB.BEACON_ID+" " +
@@ -415,15 +408,15 @@ public class SQLiteCouponDao implements CouponDao {
     }
 
     @Override
-    public synchronized ArrayList<Alert> getAlertsFromBeaconId(int minor, int major, String proximity_uuid, int proximity_trigger_range){
+    public synchronized ArrayList<Notification> getNotificationsFromBeaconId(int minor, int major, String proximity_uuid, int proximity_trigger_range){
 
-        ArrayList<Alert> alerts = new ArrayList<Alert>();
+        ArrayList<Notification> notifications = new ArrayList<Notification>();
 
         final String sql = "select N."+DB.ID+" as "+DB.ID+", N."+DB.TITLE+" as "+DB.TITLE+", N."+DB.MESSAGE+" as "+DB.MESSAGE+", N."+DB.INIT_DATE+" as "+DB.INIT_DATE+", " +
-                "N."+DB.END_DATE+" as "+DB.END_DATE+", N."+DB.PROXIMITY_TRIGGER_RANGE+" as "+DB.PROXIMITY_TRIGGER_RANGE+", N."+DB.TYPE+" as "+DB.TYPE+", " +
+                "N."+DB.END_DATE+" as "+DB.END_DATE+", N."+DB.PROXIMITY_TRIGGER_RANGE+" as "+DB.PROXIMITY_TRIGGER_RANGE+", N."+DB.ACCESS_LEVEL+" as "+DB.ACCESS_LEVEL+", " +
                 "N."+DB.AGGREGATED+" as "+DB.AGGREGATED+" " +
                 "from "+DB.NOTIFICATION_TABLE+" as N " +
-                "JOIN "+DB.BEACONS_ALERTS_TABLE+" as NB ON N."+DB.ID+" = NB."+DB.ALERT_ID+" " +
+                "JOIN "+DB.BEACONS_NOTIFICATIONS_TABLE+" as NB ON N."+DB.ID+" = NB."+DB.NOTIFICATION_ID+" " +
                 "JOIN "+DB.BEACONS_TABLE+" as B ON B."+DB.ID+" = NB."+DB.BEACON_ID+" " +
                 "where B."+DB.MINOR+" = '"+minor+"' " +
                 "AND B."+DB.MAYOR+" = '"+major+"' " +
@@ -435,11 +428,23 @@ public class SQLiteCouponDao implements CouponDao {
         Cursor c = db.rawQuery(sql, null);
         if(c.moveToFirst()) {
             do{
-                alerts.add(createEntityAlert(c));
+                notifications.add(createEntityNotification(c));
             }while (c.moveToNext());
         }
         c.close();
-        return alerts;
+        return notifications;
+    }
+
+    private Notification createEntityNotification(Cursor row) {
+        return new Notification(row.getLong(row.getColumnIndexOrThrow(DB.ID)),
+                row.getString(row.getColumnIndexOrThrow(DB.TITLE)),
+                row.getString(row.getColumnIndexOrThrow(DB.MESSAGE)),
+                row.getInt(row.getColumnIndexOrThrow(DB.PROXIMITY_TRIGGER_RANGE)),
+                row.getString(row.getColumnIndexOrThrow(DB.INIT_DATE)),
+                row.getString(row.getColumnIndexOrThrow(DB.END_DATE)),
+                row.getString(row.getColumnIndexOrThrow(DB.ACCESS_LEVEL)),
+                row.getInt(row.getColumnIndexOrThrow(DB.AGGREGATED))!=0
+        );
     }
 
     @Override
@@ -453,7 +458,7 @@ public class SQLiteCouponDao implements CouponDao {
     }
 
     @Override
-    public boolean setAggregateAlert(long id) {
+    public boolean setAggregateNotification(long id) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(DB.AGGREGATED, 1);
 
@@ -471,7 +476,7 @@ public class SQLiteCouponDao implements CouponDao {
     }
 
     @Override
-    public boolean setReadAlert(long id) {
+    public boolean setReadNotification(long id) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(DB.READ, 1);
 
@@ -583,40 +588,9 @@ public class SQLiteCouponDao implements CouponDao {
         return count != 0;
     }
 
-    @Override
-    public synchronized Coupon getCouponFromIDStore(long id) {
-
-        final String sql = "select * from "+DB.MY_COUPONS_TABLE+" where "+DB.INTEREST_POINT_ID+" = "+id + " and "+DB.CLAIMED+" = 0";
-
-        Cursor c = db.rawQuery(sql, null);
-        if(c.moveToFirst()) {
-            return createEntityMyCoupon(c);
-        }
-
-        return null;
-    }
 
     @Override
-    public ArrayList<Long> getIdsCoupons() {
-
-        ArrayList<Long> ids = new ArrayList<Long>();
-
-        final String sql = "select * from "+DB.MY_COUPONS_TABLE+" where "+DB.CLAIMED+" = 0";
-
-        Cursor c = db.rawQuery(sql, null);
-        if(c.moveToFirst()) {
-            do{
-                final Coupon coupon = createEntityMyCoupon(c);
-                if(Utils.isCurrent(coupon.getEnd_date()))
-                    ids.add(coupon.getInterest_point_id());
-            }while (c.moveToNext());
-        }
-
-        return ids;
-    }
-
-    @Override
-    public boolean existAlert(long id) {
+    public boolean existNotification(long id) {
 
         final String sql = "select count(*) as "+ DB.COUNT +" from "+DB.MY_NOTIFICATION_TABLE+" where "+DB.ID+" = "+id;
 
@@ -656,15 +630,12 @@ public class SQLiteCouponDao implements CouponDao {
         values.put(DB.TITLE, c.getTitle());
         values.put(DB.MESSAGE, c.getMessage());
         values.put(DB.ACCESS_LEVEL, c.getAccess_level());
-        values.put(DB.STORE_CATEGORY_ID, c.getStore_category_id());
-        values.put(DB.INTEREST_POINT_ID, c.getInterest_point_id());
         values.put(DB.PROXIMITY_TRIGGER_RANGE, c.getProximity_trigger_range());
-        values.put(DB.IMAGE, c.getImage());
+        values.put(DB.IMAGE, c.getImage_url());
         values.put(DB.CODE, c.getCode());
         values.put(DB.INIT_DATE, c.getInit_date());
         values.put(DB.END_DATE, c.getEnd_date());
         values.put(DB.LEGAL, c.getLegal());
-        values.put(DB.CLAIMABLE, (c.isClaimable() ? 1 : 0));
         values.put(DB.INSTRUCTIONS, c.getUse_instructions());
         values.put(DB.STOCK, c.getStock());
 

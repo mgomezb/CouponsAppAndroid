@@ -1,10 +1,8 @@
 package com.mgomez.cuponesmemoria.utilities;
 
-import android.content.Context;
-
-import com.mgomez.cuponesmemoria.model.Alert;
 import com.mgomez.cuponesmemoria.model.BeaconNotification;
 import com.mgomez.cuponesmemoria.model.Coupon;
+import com.mgomez.cuponesmemoria.model.Notification;
 import com.mgomez.cuponesmemoria.model.UserCoupon;
 
 
@@ -23,7 +21,7 @@ public abstract class NotificationHub {
 
     public abstract void userRegistered(UserCoupon userCoupon);
 
-    public abstract void userReceivesAlert(Alert alert, BeaconNotification bn);
+    public abstract void userReceivesAlert(Notification notification, BeaconNotification bn);
 
 
 }

@@ -3,18 +3,12 @@ package com.mgomez.cuponesmemoria.utilities;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.mgomez.cuponesmemoria.Constants;
 import com.mgomez.cuponesmemoria.R;
 import com.mgomez.cuponesmemoria.model.UserCoupon;
 
 
 public class SharedPreferencesConfiguration implements Configuration {
-
-    public static final String NAME = "name";
-    public static final String LAST_NAME = "last_name";
-    public static final String RUT = "rut";
-    public static final String EMAIL = "email";
-    public static final String GENDER = "gender";
-    public static final String ADDRESS = "address";
 
     private final String STORED = "stored";
 
@@ -84,12 +78,13 @@ public class SharedPreferencesConfiguration implements Configuration {
         editor.putBoolean(key(baseKey, STORED), true);
 
         // the remaining variables
-        editor.putString(key(baseKey, NAME), userCoupon.getNames());
-        editor.putString(key(baseKey, LAST_NAME), userCoupon.getLast_names());
-        editor.putString(key(baseKey, RUT), userCoupon.getRut());
-        editor.putString(key(baseKey, EMAIL), userCoupon.getEmail());
-        editor.putString(key(baseKey, ADDRESS), userCoupon.getAddress());
-        editor.putString(key(baseKey, GENDER), userCoupon.getGender());
+        editor.putString(key(baseKey, Constants.NAME), userCoupon.getNames());
+        editor.putString(key(baseKey, Constants.LAST_NAME), userCoupon.getLast_names());
+        editor.putString(key(baseKey, Constants.RUT), userCoupon.getRut());
+        editor.putString(key(baseKey, Constants.EMAIL), userCoupon.getEmail());
+        editor.putString(key(baseKey, Constants.ADDRESS), userCoupon.getAddress());
+        editor.putString(key(baseKey, Constants.GENDER), userCoupon.getGender());
+        editor.putString(key(baseKey, Constants.TOKEN), userCoupon.getAuthentication_token());
 
         editor.commit();
     }
@@ -99,12 +94,13 @@ public class SharedPreferencesConfiguration implements Configuration {
         final SharedPreferences p = getSharedPreferences(c);
         if(p.getBoolean(key(baseKey, STORED), false)){
             return new UserCoupon(
-                    p.getString(key(baseKey, NAME), null),
-                    p.getString(key(baseKey, LAST_NAME), null),
-                    p.getString(key(baseKey, RUT), null),
-                    p.getString(key(baseKey, EMAIL), null),
-                    p.getString(key(baseKey, ADDRESS), null),
-                    p.getString(key(baseKey, GENDER), null));
+                    p.getString(key(baseKey, Constants.NAME), null),
+                    p.getString(key(baseKey, Constants.LAST_NAME), null),
+                    p.getString(key(baseKey, Constants.RUT), null),
+                    p.getString(key(baseKey, Constants.EMAIL), null),
+                    p.getString(key(baseKey, Constants.ADDRESS), null),
+                    p.getString(key(baseKey, Constants.GENDER), null),
+                    p.getString(key(baseKey, Constants.TOKEN), null));
         } else {
             return userCoupon;
         }

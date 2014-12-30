@@ -10,14 +10,17 @@ public class ObjectApiHolder {
     @SerializedName("coupons")
     private Coupon[] coupons;
 
-    @SerializedName("notification_beacons")
+    @SerializedName("beacons")
     private BeaconNotification[] beaconNotifications;
 
-    @SerializedName("alerts")
-    private Alert[] alerts;
+    @SerializedName("notifications")
+    private Notification[] notifications;
 
     @SerializedName("version")
     private String version;
+
+    @SerializedName("categories")
+    private Category[] categories;
 
     public String getVersion() {
         return version;
@@ -31,7 +34,11 @@ public class ObjectApiHolder {
         return beaconNotifications;
     }
 
-    public Alert[] getAlerts() {
-        return alerts;
+    public Notification[] getAlerts() {
+        return notifications;
+    }
+
+    public Category[] getCategories() {
+        return categories;
     }
 }

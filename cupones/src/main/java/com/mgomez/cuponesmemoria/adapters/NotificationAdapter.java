@@ -9,24 +9,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mgomez.cuponesmemoria.model.Notification;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import com.mgomez.cuponesmemoria.R;
-import com.mgomez.cuponesmemoria.model.Alert;
 import com.mgomez.cuponesmemoria.utilities.Utils;
 
 /**
  * Created by MGomez on 11-06-14.
  */
-public class NotificationAdapter extends ArrayAdapter<Alert> {
+public class NotificationAdapter extends ArrayAdapter<Notification> {
 
     Context context;
     final LayoutInflater layoutInflater;
 
 
-    public NotificationAdapter(Context context, List<Alert> notifications) {
+    public NotificationAdapter(Context context, List<Notification> notifications) {
         super(context, R.layout.notification_item, notifications);
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
@@ -36,7 +36,7 @@ public class NotificationAdapter extends ArrayAdapter<Alert> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         NotificationHolder notificationHolder;
-        final Alert notification = getItem(position);
+        final Notification notification = getItem(position);
 
         if(v == null) {
             v = layoutInflater.inflate(R.layout.notification_item, parent, false);

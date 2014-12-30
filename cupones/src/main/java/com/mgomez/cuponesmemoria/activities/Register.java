@@ -309,12 +309,17 @@ public class Register extends Activity {
         protected void onPostExecute(JSONObject result) {
             if(result!=null){
                 try {
-                    if (result.has(Constants.MESSAGE))
-                        Toast.makeText(getBaseContext(), result.getString(Constants.MESSAGE), Toast.LENGTH_LONG).show();
+                    if (result.has(Constants.ERROR))
+                        Toast.makeText(getBaseContext(), result.getString(Constants.ERROR).replace("[", "").replace("]",""), Toast.LENGTH_LONG).show();
                     else {
-                        configuration.setProperty(getBaseContext(), Constants.COUPON_TOKEN, result.getJSONObject(Constants.USER).getString(Constants.COUPON_TOKEN));
-                        configuration.setUserCoupon(getBaseContext(), Constants.COUPON_TAG, userCoupon);
-                        notificationHub.userRegistered(userCoupon);
+                        final GsonBuilder gsonBuilder = new GsonBuilder();
+                        final Gson gson = gsonBuilder.create();
+
+                        final UserCoupon user = gson.fromJson(result.toString(), UserCoupon.class);
+
+                        configuration.setProperty(getBaseContext(), Constants.TOKEN, user.getAuthentication_token());
+                        configuration.setUserCoupon(getBaseContext(), Constants.USER, user);
+                        notificationHub.userRegistered(user);
 
                         Toast.makeText(getBaseContext(), getString(R.string.register_done), Toast.LENGTH_LONG).show();
                         finish();

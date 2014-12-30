@@ -10,6 +10,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -118,6 +119,45 @@ public class Utils {
         }
         return null;
 
+    }
+
+    public static String putRequest(JSONObject json, String uri, ArrayList<Header> headers){
+
+        HttpClient httpClient = new DefaultHttpClient(getParams());
+        HttpPut putRequest = new HttpPut(uri);
+
+        for(Header h:headers)
+            putRequest.addHeader(h);
+
+        putRequest.addHeader("Content-type", "application/json");
+        putRequest.addHeader("Accept", "application/json");
+        putRequest.addHeader("Authorization", "Basic");
+        try {
+            putRequest.setEntity(new StringEntity(json.toString(), "UTF-8"));
+        } catch (UnsupportedEncodingException e1) {
+            return null;
+        }
+        try {
+            HttpResponse respuesta = httpClient.execute(putRequest);
+            int code = respuesta.getStatusLine().getStatusCode();
+            String resp = EntityUtils.toString(respuesta.getEntity());
+            if(code == 200 || code == 201|| code == 202|| code == 204)
+                return resp;
+            else{
+                if(code == 400 || code == 401 || code == 406)
+                    Log.e("Error", resp);
+            }
+
+        } catch (ClientProtocolException e) {
+            return null;
+        } catch (IOException e) {
+            return null;
+        } catch (NullPointerException e){
+            return null;
+        }catch (Exception e){
+            return null;
+        }
+        return null;
     }
 
     public static String postRequest(JSONObject json, String uri){
@@ -277,7 +317,7 @@ public class Utils {
 
     public static boolean isCurrent(String endDate){
         final DateTime newDate = new DateTime();
-        final DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss Z");
+        final DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         final DateTime dateTimeCoupon = formatter.parseDateTime(endDate);
 
@@ -290,7 +330,7 @@ public class Utils {
     }
 
     public static String getDate(String endDate){
-        final DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss Z");
+        final DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         final DateTimeFormatter formatter2 = DateTimeFormat.forPattern("dd/MM/yyyy");
 
         return formatter2.print(formatter.parseDateTime(endDate));

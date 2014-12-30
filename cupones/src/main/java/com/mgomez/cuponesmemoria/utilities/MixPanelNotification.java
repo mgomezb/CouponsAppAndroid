@@ -2,9 +2,9 @@ package com.mgomez.cuponesmemoria.utilities;
 
 import android.content.Context;
 
-import com.mgomez.cuponesmemoria.model.Alert;
 import com.mgomez.cuponesmemoria.model.BeaconNotification;
 import com.mgomez.cuponesmemoria.model.Coupon;
+import com.mgomez.cuponesmemoria.model.Notification;
 import com.mgomez.cuponesmemoria.model.UserCoupon;
 
 /**
@@ -49,7 +49,7 @@ public class MixPanelNotification extends NotificationHub {
     }
 
     @Override
-    public void userReceivesAlert(Alert alert, BeaconNotification bn) {
+    public void userReceivesAlert(Notification notification, BeaconNotification bn) {
 
     }
 

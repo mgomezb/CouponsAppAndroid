@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.mgomez.cuponesmemoria.CouponApplication;
 import com.mgomez.cuponesmemoria.R;
 import com.mgomez.cuponesmemoria.adapters.NotificationAdapter;
-import com.mgomez.cuponesmemoria.model.Alert;
+import com.mgomez.cuponesmemoria.model.Notification;
 import com.mgomez.cuponesmemoria.persistence.CouponDao;
 import com.mgomez.cuponesmemoria.utilities.Utils;
 
@@ -30,7 +30,7 @@ public class NotificationActivity extends Activity {
     ListView notificationList;
     ProgressBar progressBar;
     NotificationAdapter adapter;
-    ArrayList<Alert> notifications;
+    ArrayList<Notification> notifications;
     TextView message;
     CouponDao couponDao;
 
@@ -70,9 +70,9 @@ public class NotificationActivity extends Activity {
         @Override
         protected NotificationAdapter doInBackground(Void... params) {
 
-            notifications = couponDao.getMyAlerts();
+            notifications = couponDao.getMyNotifications();
 
-            for(Alert a : notifications){
+            for(Notification a : notifications){
                 if(!Utils.isCurrent(a.getEnd_date()))
                     notifications.remove(a);
             }
@@ -92,14 +92,14 @@ public class NotificationActivity extends Activity {
         }
     }
 
-    private class ChangeStateNotifications extends AsyncTask<ArrayList<Alert>, Void, Void> {
+    private class ChangeStateNotifications extends AsyncTask<ArrayList<Notification>, Void, Void> {
 
 
         @Override
-        protected Void doInBackground(ArrayList<Alert>... params) {
+        protected Void doInBackground(ArrayList<Notification>... params) {
 
-            for(Alert alert: params[0]){
-                couponDao.setReadAlert(alert.getId());
+            for(Notification notification: params[0]){
+                couponDao.setReadNotification(notification.getId());
             }
 
             return null;

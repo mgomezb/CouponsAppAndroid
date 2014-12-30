@@ -15,18 +15,18 @@ import com.mgomez.cuponesmemoria.Constants.DB;
  */
 public class SQLiteHelper extends SQLiteOpenHelper {
 
-    private static final String CREATE_TABLE_BEACONS = "CREATE TABLE "+DB.BEACONS_TABLE+" ("+DB.ID+" integer NOT NULL, "+DB.X+" integer NOT NULL, "+DB.Y+" integer NOT NULL, "+DB.FLOOR_ID+" integer NOT NULL, "+DB.MAYOR+" integer NOT NULL, "+DB.MINOR+" integer NOT NULL, "+DB.PROXIMITY_UUID+" integer NOT NULL);";
-    private static final String CREATE_TABLE_COUPONS = "CREATE TABLE "+DB.COUPONS_TABLE+" ("+DB.ID+" integer NOT NULL, "+DB.TITLE+" text NOT NULL, "+DB.MESSAGE+" text NOT NULL, "+DB.ACCESS_LEVEL+" text NOT NULL, "+DB.LEGAL+" text NOT NULL, "+DB.STORE_CATEGORY_ID+" integer, "+DB.INTEREST_POINT_ID+" integer, "+DB.PROXIMITY_TRIGGER_RANGE+" integer NOT NULL, "+DB.IMAGE+" text NOT NULL, "+DB.CODE+" text NOT NULL, "+DB.INIT_DATE+" text NOT NULL, "+DB.END_DATE+" text NOT NULL, "+DB.AGGREGATED+" integer NOT NULL, "+DB.CLAIMABLE+" integer NOT NULL, "+DB.INSTRUCTIONS+" text, "+DB.STOCK+" integer);";
-    private static final String CREATE_TABLE_NOTIFICATIONS = "CREATE TABLE "+DB.NOTIFICATION_TABLE+" ("+DB.ID+" integer NOT NULL, "+DB.TITLE+" text NOT NULL, "+DB.TYPE+" text NOT NULL, "+DB.MESSAGE+" text NOT NULL, "+DB.PROXIMITY_TRIGGER_RANGE+" integer NOT NULL, "+DB.INIT_DATE+" text NOT NULL, "+DB.END_DATE+" text NOT NULL, "+DB.AGGREGATED+" integer NOT NULL);";
+    private static final String CREATE_TABLE_BEACONS = "CREATE TABLE "+DB.BEACONS_TABLE+" ("+DB.ID+" integer NOT NULL, "+DB.MAYOR+" integer NOT NULL, "+DB.MINOR+" integer NOT NULL, "+DB.PROXIMITY_UUID+" integer NOT NULL);";
+    private static final String CREATE_TABLE_COUPONS = "CREATE TABLE "+DB.COUPONS_TABLE+" ("+DB.ID+" integer NOT NULL, "+DB.TITLE+" text NOT NULL, "+DB.MESSAGE+" text NOT NULL, "+DB.ACCESS_LEVEL+" text NOT NULL, "+DB.LEGAL+" text NOT NULL, "+DB.CATEGORY_ID+" integer, "+DB.PROXIMITY_TRIGGER_RANGE+" integer NOT NULL, "+DB.IMAGE+" text NOT NULL, "+DB.CODE+" text NOT NULL, "+DB.INIT_DATE+" text NOT NULL, "+DB.END_DATE+" text NOT NULL, "+DB.AGGREGATED+" integer NOT NULL, "+DB.INSTRUCTIONS+" text, "+DB.STOCK+" integer, "+DB.STORE_ID+" integer, "+DB.STORE_NAME+" text NOT NULL);";
+    private static final String CREATE_TABLE_NOTIFICATIONS = "CREATE TABLE "+DB.NOTIFICATION_TABLE+" ("+DB.ID+" integer NOT NULL, "+DB.TITLE+" text NOT NULL, "+DB.MESSAGE+" text NOT NULL, "+DB.PROXIMITY_TRIGGER_RANGE+" integer NOT NULL, "+DB.INIT_DATE+" text NOT NULL, "+DB.END_DATE+" text NOT NULL, "+DB.AGGREGATED+" integer NOT NULL, "+DB.ACCESS_LEVEL+" text NOT NULL);";
     private static final String CREATE_TABLE_BEACONS_COUPONS = "CREATE TABLE "+DB.BEACONS_COUPONS_TABLE+" ("+DB.BEACON_ID+" integer NOT NULL,  "+DB.COUPON_ID+" integer NOT NULL);";
-    private static final String CREATE_TABLE_BEACONS_ALERTS = "CREATE TABLE "+DB.BEACONS_ALERTS_TABLE+" ("+DB.BEACON_ID+" integer NOT NULL,  "+DB.ALERT_ID+" integer NOT NULL);";
+    private static final String CREATE_TABLE_BEACONS_ALERTS = "CREATE TABLE "+DB.BEACONS_NOTIFICATIONS_TABLE +" ("+DB.BEACON_ID+" integer NOT NULL,  "+DB.NOTIFICATION_ID +" integer NOT NULL);";
 
-    private static final String CREATE_TABLE_MY_COUPONS = "CREATE TABLE "+DB.MY_COUPONS_TABLE+" ("+_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+DB.ID+" integer NULL, "+DB.TITLE+" text NOT NULL, "+DB.MESSAGE+" text NOT NULL, "+DB.ACCESS_LEVEL+" text NOT NULL, "+DB.LEGAL+" text NOT NULL, "+DB.STORE_CATEGORY_ID+" integer, "+DB.INTEREST_POINT_ID+" integer, "+DB.PROXIMITY_TRIGGER_RANGE+" integer NOT NULL, "+DB.IMAGE+" text NOT NULL, "+DB.CODE+" text NOT NULL, "+DB.INIT_DATE+" text NOT NULL, "+DB.END_DATE+" text NOT NULL, "+DB.CLAIMED+" integer NOT NULL, "+DB.CLAIMABLE+" integer NOT NULL, "+DB.INSTRUCTIONS+" text, "+DB.STOCK+" integer);";
-    private static final String CREATE_TABLE_MY_NOTIFICATIONS = "CREATE TABLE "+DB.MY_NOTIFICATION_TABLE+" ("+_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+DB.ID+" integer NOT NULL, "+DB.TITLE+" text NOT NULL, "+DB.TYPE+" text NOT NULL, "+DB.MESSAGE+" text NOT NULL, "+DB.PROXIMITY_TRIGGER_RANGE+" integer NOT NULL, "+DB.INIT_DATE+" text NOT NULL, "+DB.END_DATE+" text NOT NULL, "+DB.READ+" integer NOT NULL, "+DB.RECEIVED_DATE+" integer NOT NULL);";
+    private static final String CREATE_TABLE_MY_COUPONS = "CREATE TABLE "+DB.MY_COUPONS_TABLE+" ("+_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+DB.ID+" integer NULL, "+DB.TITLE+" text NOT NULL, "+DB.MESSAGE+" text NOT NULL, "+DB.ACCESS_LEVEL+" text NOT NULL, "+DB.CATEGORY_ID+" integer,"+DB.LEGAL+" text NOT NULL, "+DB.PROXIMITY_TRIGGER_RANGE+" integer NOT NULL, "+DB.IMAGE+" text NOT NULL, "+DB.CODE+" text NOT NULL, "+DB.INIT_DATE+" text NOT NULL, "+DB.END_DATE+" text NOT NULL, "+DB.CLAIMED+" integer NOT NULL, "+DB.INSTRUCTIONS+" text, "+DB.STOCK+" integer, "+DB.STORE_ID+" integer, "+DB.STORE_NAME+" text NOT NULL);";
+    private static final String CREATE_TABLE_MY_NOTIFICATIONS = "CREATE TABLE "+DB.MY_NOTIFICATION_TABLE+" ("+_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+DB.ID+" integer NOT NULL, "+DB.TITLE+" text NOT NULL, "+DB.MESSAGE+" text NOT NULL, "+DB.PROXIMITY_TRIGGER_RANGE+" integer NOT NULL, "+DB.INIT_DATE+" text NOT NULL, "+DB.END_DATE+" text NOT NULL, "+DB.READ+" integer NOT NULL, "+DB.RECEIVED_DATE+" integer NOT NULL, "+DB.ACCESS_LEVEL+" text NOT NULL);";
 
     private static final String CREATE_TABLE_CONFIGURATIONS = "CREATE TABLE "+DB.CONFIGURATION_TABLE+" ("+DB.ID+" INTEGER PRIMARY KEY)";
-
-    public static final int VERSION = 20;
+    private static final String CREATE_TABLE_CATEGORIES = "CREATE TABLE "+DB.CATEGORIES_TABLE+" ("+DB.ID+" INTEGER PRIMARY KEY, "+DB.NAME+" text NOT NULL);";
+    public static final int VERSION = 1;
 
     public SQLiteHelper(Context context){
         super(context, DB.DATA_BASE ,null, VERSION);
@@ -43,6 +43,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             db.execSQL(CREATE_TABLE_MY_COUPONS);
             db.execSQL(CREATE_TABLE_MY_NOTIFICATIONS);
             db.execSQL(CREATE_TABLE_CONFIGURATIONS);
+            db.execSQL(CREATE_TABLE_CATEGORIES);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,7 +55,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+DB.COUPONS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+DB.NOTIFICATION_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+DB.BEACONS_COUPONS_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS "+DB.BEACONS_ALERTS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.BEACONS_NOTIFICATIONS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.CATEGORIES_TABLE);
         onCreate(db);
     }
 

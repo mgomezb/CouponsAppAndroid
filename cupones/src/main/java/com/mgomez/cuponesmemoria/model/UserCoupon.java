@@ -8,40 +8,62 @@ import android.os.Parcelable;
  */
 public class UserCoupon implements Parcelable{
 
-    String names, last_names, rut, email, address, gender;
+    String name;
+    String last_name;
+    String rut;
+    String email;
+    String address;
+    String gender;
+    String password;
+    String authentication_token;
+    int id;
 
-    public UserCoupon(String names, String last_names, String rut, String email, String address, String gender){
-        this.names = names;
-        this.last_names = last_names;
+
+    public UserCoupon(String name, String last_name, String rut, String email, String address, String gender){
+        this.name = name;
+        this.last_name = last_name;
         this.rut = rut;
         this.email = email;
         this.address = address;
         this.gender = gender;
+        this.password = "manolete";
+    }
+
+    public UserCoupon(String name, String last_name, String rut, String email, String address, String gender, String token){
+        this.name = name;
+        this.last_name = last_name;
+        this.rut = rut;
+        this.email = email;
+        this.address = address;
+        this.gender = gender;
+        this.authentication_token = token;
     }
 
     public UserCoupon(Parcel p){
-        this.names = p.readString();
-        this.last_names = p.readString();
+        this.name = p.readString();
+        this.last_name = p.readString();
         this.rut = p.readString();
         this.email = p.readString();
         this.address = p.readString();
         this.gender = p.readString();
+        this.authentication_token = p.readString();
+        this.id = p.readInt();
     }
 
     public String getNames() {
-        return names;
+        return name;
     }
 
     public void setNames(String names) {
-        this.names = names;
+        this.name = names;
     }
 
     public String getLast_names() {
-        return last_names;
+        return last_name;
     }
 
     public void setLast_names(String last_names) {
-        this.last_names = last_names;
+        this.last_name = last_names;
     }
 
     public String getRut() {
@@ -77,8 +99,26 @@ public class UserCoupon implements Parcelable{
     }
 
     public String getNameComplete(){
-        return names+" "+last_names;
+        return name+" "+last_name;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAuthentication_token() {
+        return authentication_token;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+
 
     @Override
     public int describeContents() {
@@ -93,6 +133,8 @@ public class UserCoupon implements Parcelable{
         dest.writeString(getEmail());
         dest.writeString(getAddress());
         dest.writeString(getGender());
+        dest.writeString(getAuthentication_token());
+        dest.writeInt(getId());
     }
 
     public static final Parcelable.Creator<UserCoupon> CREATOR = new Parcelable.Creator<UserCoupon>() {

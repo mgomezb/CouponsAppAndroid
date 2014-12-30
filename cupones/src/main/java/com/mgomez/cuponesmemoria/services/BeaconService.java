@@ -19,9 +19,9 @@ import com.mgomez.cuponesmemoria.CouponApplication;
 import com.mgomez.cuponesmemoria.R;
 import com.mgomez.cuponesmemoria.activities.CouponActivity;
 import com.mgomez.cuponesmemoria.activities.NotificationActivity;
-import com.mgomez.cuponesmemoria.model.Alert;
 import com.mgomez.cuponesmemoria.model.BeaconNotification;
 import com.mgomez.cuponesmemoria.model.Coupon;
+import com.mgomez.cuponesmemoria.model.Notification;
 import com.mgomez.cuponesmemoria.persistence.CouponDao;
 import com.mgomez.cuponesmemoria.utilities.Configuration;
 import com.mgomez.cuponesmemoria.utilities.NotificationHub;
@@ -128,16 +128,16 @@ public class BeaconService extends Service implements IBeaconConsumer, MonitorNo
         for (IBeacon beacon: iBeacons) {
             createNotification(couponDao.getCouponsFromBeaconId(beacon.getMinor(), beacon.getMajor(), beacon.getProximityUuid(), beacon.getProximity()), beacon);
 
-            if(configuration.getProperty(getBaseContext(), Constants.ALERTS_ACTIVATE, true))
-                createNotificationAlert(couponDao.getAlertsFromBeaconId(beacon.getMinor(), beacon.getMajor(), beacon.getProximityUuid(), beacon.getProximity()), beacon);
+            if(configuration.getProperty(getBaseContext(), Constants.NOTIFICATIONS_ACTIVATE, true))
+                createNotificationAlert(couponDao.getNotificationsFromBeaconId(beacon.getMinor(), beacon.getMajor(), beacon.getProximityUuid(), beacon.getProximity()), beacon);
         }
 
     }
 
 
-    private void createNotificationAlert(ArrayList<Alert> alerts, IBeacon beacon) {
+    private void createNotificationAlert(ArrayList<Notification> notifications, IBeacon beacon) {
 
-        if(alerts.size()>0) {
+        if(notifications.size()>0) {
 
             final BeaconNotification bn = couponDao.getBeaconNotification(beacon);
 
@@ -150,10 +150,10 @@ public class BeaconService extends Service implements IBeaconConsumer, MonitorNo
             PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-            for(Alert a : alerts) {
+            for(Notification a : notifications) {
 
-                if(!couponDao.existAlert(a.getId()) && Utils.isCurrent(a.getEnd_date())) {
-                    couponDao.insertMyAlert(a);
+                if(!couponDao.existNotification(a.getId()) && Utils.isCurrent(a.getEnd_date())) {
+                    couponDao.insertMyNotification(a);
 
                     notificationHub.userReceivesAlert(a, bn);
 
@@ -196,7 +196,7 @@ public class BeaconService extends Service implements IBeaconConsumer, MonitorNo
                         notificationHub.userReceivesCoupon(c, bn);
                     }
                     else {
-                        if( couponDao.isFilterConfiguration(c.getStore_category_id())) {
+                        if( couponDao.isFilterConfiguration(c.getCategory())) {
                             couponDao.insertMyCoupons(c);
                             notificationHub.userReceivesCoupon(c, bn);
                         }

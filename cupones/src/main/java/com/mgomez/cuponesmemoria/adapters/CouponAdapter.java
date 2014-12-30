@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.mgomez.cuponesmemoria.CouponApplication;
 import com.mgomez.cuponesmemoria.utilities.Configuration;
-import com.mgomez.cuponesmemoria.utilities.SharedPreferencesConfiguration;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -72,41 +71,36 @@ public class CouponAdapter extends ArrayAdapter<Coupon> {
                 dialog.show(fm, "TermsAndContiditionsDialog");
             }
         });
-        if(coupon.isClaimable()) {
-            if(coupon.getStock()>0) {
-                if (coupon.isClaimed()) {
-                    couponHolder.getCoupon.setEnabled(false);
-                    couponHolder.getCoupon.setText(context.getString(R.string.coupon_claimed));
-                    Picasso.with(context).load(R.drawable.cupon_tag_claimed).into(couponHolder.enableDisableCoupon);
-                } else {
-                    Picasso.with(context).load(R.drawable.cupon_tag).into(couponHolder.enableDisableCoupon);
-                    couponHolder.getCoupon.setEnabled(true);
-                    couponHolder.getCoupon.setText(context.getString(R.string.claim_coupon));
-                    couponHolder.getCoupon.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (configuration.getProperty(context, Constants.COUPON_TOKEN, null) != null) {
-                                DialogFragment dialog = ClaimCoupon.newInstance(coupon, position);
-                                dialog.show(fm, "ClaimCoupon");
-                            } else {
-                                DialogFragment dialogFragment = DialogNoRegister.newInstance(coupon);
-                                dialogFragment.show(fm, "DialogNoRegister");
-                            }
-                        }
-                    });
-                }
-            }
-            else{
+
+        if(coupon.getStock()>0) {
+            if (coupon.isClaimed()) {
                 couponHolder.getCoupon.setEnabled(false);
-                couponHolder.getCoupon.setText("CUPÓN AGOTADO");
+                couponHolder.getCoupon.setText(context.getString(R.string.coupon_claimed));
                 Picasso.with(context).load(R.drawable.cupon_tag_claimed).into(couponHolder.enableDisableCoupon);
+            } else {
+                Picasso.with(context).load(R.drawable.cupon_tag).into(couponHolder.enableDisableCoupon);
+                couponHolder.getCoupon.setEnabled(true);
+                couponHolder.getCoupon.setText(context.getString(R.string.claim_coupon));
+                couponHolder.getCoupon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (configuration.getProperty(context, Constants.TOKEN, null) != null) {
+                            DialogFragment dialog = ClaimCoupon.newInstance(coupon, position);
+                            dialog.show(fm, "ClaimCoupon");
+                        } else {
+                            DialogFragment dialogFragment = DialogNoRegister.newInstance(coupon);
+                            dialogFragment.show(fm, "DialogNoRegister");
+                        }
+                    }
+                });
             }
         }
-        else {
+        else{
             couponHolder.getCoupon.setEnabled(false);
-            couponHolder.getCoupon.setText(context.getString(R.string.coupon_no_claimable));
-            Picasso.with(context).load(R.drawable.cupon_tag).into(couponHolder.enableDisableCoupon);
+            couponHolder.getCoupon.setText("CUPÓN AGOTADO");
+            Picasso.with(context).load(R.drawable.cupon_tag_claimed).into(couponHolder.enableDisableCoupon);
         }
+
 
         Picasso.with(context).load(coupon.getUrlImage()).centerCrop().fit().placeholder(R.drawable.imgplaceholder3).into(couponHolder.image);
         return  v;

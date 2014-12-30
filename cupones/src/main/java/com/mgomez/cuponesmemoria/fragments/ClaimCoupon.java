@@ -185,19 +185,17 @@ public class ClaimCoupon extends DialogFragment {
 
         @Override
         protected JSONObject doInBackground(String... code) {
-           final String token = configuration.getProperty(getActivity(), Constants.COUPON_TOKEN, "");
-
-            return couponConnector.validateCoupon(coupon.getId(), code[0], token);
+            return couponConnector.validateCoupon(coupon.getId(), code[0]);
         }
 
         @Override
         protected void onPostExecute(JSONObject result) {
             if(result!=null){
                 try {
-                    if (result.has(Constants.MESSAGE))
+                    if (result.getInt(Constants.STATUS)!= 200)
                         Toast.makeText(getActivity(), result.getString(Constants.MESSAGE), Toast.LENGTH_LONG).show();
                     else{
-                        if(result.has(Constants.COUPON_CLAIM)) {
+                        if(result.getInt(Constants.STATUS)== 200) {
                             CouponDao couponDao = new SQLiteCouponDao(getActivity());
                             couponDao.setClaimedCoupon(coupon.getId());
 
@@ -205,10 +203,9 @@ public class ClaimCoupon extends DialogFragment {
 
                             ((CouponActivity) getActivity()).setCouponClaimed(position);
 
-                            notificationHub.userClaimedCoupon( coupon);
+                            notificationHub.userClaimedCoupon(coupon);
 
                             dismiss();
-
                         }
                     }
                     dismiss();

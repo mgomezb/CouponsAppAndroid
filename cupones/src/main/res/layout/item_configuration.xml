@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:switchpref="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/switch_layout_style">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/category"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/switch1" />
+
+    <org.jraf.android.backport.switchwidget.Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switch1"
+        android:checked="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        style="@style/switch_style"
+        switchpref:thumb="@drawable/switch_configurations"
+        switchpref:track="@drawable/switch_background"
+        switchpref:textOn="@string/switch_on"
+        switchpref:textOff="@string/switch_off"
+        switchpref:switchMinWidth="56dp"/>
+</RelativeLayout>

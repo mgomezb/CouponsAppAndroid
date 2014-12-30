@@ -1,8 +1,8 @@
 package com.mgomez.cuponesmemoria.persistence;
 
-import com.mgomez.cuponesmemoria.model.Alert;
 import com.mgomez.cuponesmemoria.model.BeaconNotification;
 import com.mgomez.cuponesmemoria.model.Coupon;
+import com.mgomez.cuponesmemoria.model.Notification;
 import com.radiusnetworks.ibeacon.IBeacon;
 
 import java.util.ArrayList;
@@ -18,9 +18,9 @@ public interface CouponDao {
 
     void insertMyCoupons(Coupon c);
 
-    void insertAlerts(List<Alert> alerts);
+    void insertNotifications(List<Notification> notifications);
 
-    void insertMyAlert(Alert alert);
+    void insertMyNotification(Notification notification);
 
     ArrayList<BeaconNotification> getBeaconNotifications();
 
@@ -30,21 +30,21 @@ public interface CouponDao {
 
     ArrayList<Coupon> getMyCoupons();
 
-    ArrayList<Alert> getMyAlerts();
+    ArrayList<Notification> getMyNotifications();
 
-    ArrayList<Alert> getAlertsVisibles();
+    ArrayList<Notification> getNotificationsVisibles();
 
     ArrayList<Coupon> getCouponsFromBeaconId(int minor, int major, String proximity_uuid, int proximity_trigger_range);
 
-    ArrayList<Alert> getAlertsFromBeaconId(int minor, int major, String proximity_uuid, int proximity_trigger_range);
+    ArrayList<Notification> getNotificationsFromBeaconId(int minor, int major, String proximity_uuid, int proximity_trigger_range);
 
     boolean setAggregatedCoupon(long id);
 
-    boolean setAggregateAlert(long id);
+    boolean setAggregateNotification(long id);
 
     boolean setClaimedCoupon(long id);
 
-    boolean setReadAlert(long id);
+    boolean setReadNotification(long id);
 
     int getCountNotifications();
 
@@ -60,11 +60,7 @@ public interface CouponDao {
 
     boolean existCoupon(long id);
 
-    Coupon getCouponFromIDStore(long id);
-
-    ArrayList<Long> getIdsCoupons();
-
-    boolean existAlert(long id);
+    boolean existNotification(long id);
 
     void updateMyCoupons();
 }

@@ -24,9 +24,9 @@ public class CouponApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        couponConnector = new WSCouponConnector();
-        couponDao = SQLiteCouponDao.getInstance(getBaseContext());
         configuration = new SharedPreferencesConfiguration();
+        couponConnector = new WSCouponConnector(getBaseContext());
+        couponDao = SQLiteCouponDao.getInstance(getBaseContext());
         notificationHub = MixPanelNotification.getInstance(getBaseContext());
     }
 

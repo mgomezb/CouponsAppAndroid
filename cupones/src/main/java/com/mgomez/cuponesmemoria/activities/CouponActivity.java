@@ -176,6 +176,7 @@ public class CouponActivity extends Activity {
 
         @Override
         protected void onPostExecute(ObjectApiHolder data) {
+
             if(data!=null){
                 if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
                     new SetDB().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, data);
@@ -208,7 +209,7 @@ public class CouponActivity extends Activity {
                     couponDao.insertBeacons(Arrays.asList(objectApiHolder.getBeaconNotifications()));
 
                 if(objectApiHolder.getAlerts()!=null)
-                    couponDao.insertAlerts(Arrays.asList(objectApiHolder.getAlerts()));
+                    couponDao.insertNotifications(Arrays.asList(objectApiHolder.getAlerts()));
 
                 if(objectApiHolder.getCoupons()!=null){
                     couponDao.insertCoupons(Arrays.asList(objectApiHolder.getCoupons()));
