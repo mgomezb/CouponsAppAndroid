@@ -82,8 +82,8 @@
     <color name="wifi_skip_active">#ff524e4e</color>
     <color name="transparent">#00000000</color>
 
-    <color name="background_splash_start">#343232</color>
-    <color name="background_splash_end">#000000</color>
+    <color name="background_login">#ff161a9d</color>
+    <color name="background_login_end">#000000</color>
 
     <color name="autolocation_red">#D44B4A</color>
     <color name="background_title_item_coupon">#CFFFFFFF</color>
@@ -116,5 +116,6 @@
     <color name="switch_activated">#5DB23E</color>
     <color name="switch_desactivated">#DADADA</color>
     <color name="switch_border">#b2b2b2</color>
+    <color name="login_text_color">#87e9e7</color>
 
 </resources>

@@ -22,4 +22,8 @@ public interface CouponConnector {
 
     List<Category> getCategories();
 
+    JSONObject login(String email, String password);
+
+    boolean logout();
+
 }

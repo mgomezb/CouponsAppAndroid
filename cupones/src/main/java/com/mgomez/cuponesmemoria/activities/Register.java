@@ -270,6 +270,8 @@ public class Register extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                Intent i = new Intent(Register.this, Login.class);
+                startActivity(i);
                 finish();
                 return true;
 
@@ -322,6 +324,8 @@ public class Register extends Activity {
                         notificationHub.userRegistered(user);
 
                         Toast.makeText(getBaseContext(), getString(R.string.register_done), Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                        startActivity(new Intent(Register.this, CouponActivity.class));
                         finish();
                     }
                 }catch (JSONException e){
@@ -351,6 +355,13 @@ public class Register extends Activity {
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(Register.this, Login.class);
+        startActivity(i);
+        finish();
     }
 
     @Override

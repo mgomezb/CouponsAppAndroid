@@ -646,7 +646,7 @@ public class SQLiteCouponDao implements CouponDao {
     private boolean expiredCoupon(long idMyCoupon) {
 
         ContentValues values = new ContentValues();
-        values.put(DB.END_DATE, "2014-10-08 00:00:00 -0400");
+        values.put(DB.END_DATE, "2014-11-30T10:28:00.000Z");
 
         boolean update = db.update(DB.MY_COUPONS_TABLE, values ,DB.ID + " = ?", new String[]{""+idMyCoupon}) > 0;
         return update;

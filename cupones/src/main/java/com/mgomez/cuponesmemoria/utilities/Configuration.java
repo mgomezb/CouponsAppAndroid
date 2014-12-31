@@ -26,4 +26,6 @@ public interface Configuration {
     void setUserCoupon(Context c, String key, UserCoupon userCoupon);
 
     UserCoupon getUserCoupon(Context c, String key, UserCoupon userCoupon);
+
+    void setLogOut(Context c, String key);
 }

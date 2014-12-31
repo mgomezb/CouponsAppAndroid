@@ -65,6 +65,13 @@ public class CouponActivity extends Activity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(configuration.getUserCoupon(getBaseContext(), Constants.USER, null) == null)
+            finish();
+    }
+
     private synchronized void loadData() {
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
             new LoadData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

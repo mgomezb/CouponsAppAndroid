@@ -106,4 +106,11 @@ public class SharedPreferencesConfiguration implements Configuration {
         }
     }
 
+    @Override
+    public void setLogOut(Context c, String baseKey) {
+        final SharedPreferences.Editor editor = getSharedPreferences(c).edit();
+        editor.putBoolean(key(baseKey, STORED), false);
+        editor.commit();
+    }
+
 }

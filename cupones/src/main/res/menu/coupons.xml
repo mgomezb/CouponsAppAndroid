@@ -5,4 +5,9 @@
         android:icon="@drawable/menu_tools"
         android:showAsAction="always"
         android:title="@string/configurations"/>
+    <item android:id="@+id/logout"
+        android:icon="@drawable/logout"
+        android:showAsAction="always"
+        android:visible="false"
+        android:title="@string/logout"/>
 </menu>

@@ -4,10 +4,14 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+
+import com.mgomez.cuponesmemoria.model.HttpDeleteWithBody;
+
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -176,7 +180,7 @@ public class Utils {
             HttpResponse respuesta = httpClient.execute(postRequest);
             int code = respuesta.getStatusLine().getStatusCode();
             String resp = EntityUtils.toString(respuesta.getEntity());
-            if(code == 200 || code == 422) {
+            if(code == 200 || code == 422 || code == 401) {
                 Log.d("respuesta", resp);
                 return resp;
             }
@@ -194,6 +198,38 @@ public class Utils {
             return null;
         }
         return null;
+    }
+
+    public static int deleteRequest(String uri, JSONObject json){
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpDeleteWithBody deleteRequest = new HttpDeleteWithBody(uri);
+
+        deleteRequest.addHeader("Content-type", "application/json");
+        deleteRequest.addHeader("Accept", "application/json");
+        deleteRequest.addHeader("Authorization", "Basic");
+
+        try {
+            deleteRequest.setEntity(new StringEntity(json.toString(), "UTF-8"));
+        } catch (UnsupportedEncodingException e1) {
+            return 404;
+        }
+
+
+        try {
+            HttpResponse respuesta = httpClient.execute(deleteRequest);
+            int code = respuesta.getStatusLine().getStatusCode();
+            return code;
+        } catch (ClientProtocolException e) {
+            return 404;
+        } catch (IOException e) {
+            return 404;
+        } catch (NullPointerException e){
+            return 404;
+        }catch (Exception e){
+            Log.e("Error", e.getMessage());
+            return 404;
+        }
     }
 
     public static String postRequest(JSONObject json, String uri, String token){

@@ -17,6 +17,7 @@ public class UserCoupon implements Parcelable{
     String password;
     String authentication_token;
     int id;
+    String user_type;
 
 
     public UserCoupon(String name, String last_name, String rut, String email, String address, String gender){
@@ -48,6 +49,7 @@ public class UserCoupon implements Parcelable{
         this.gender = p.readString();
         this.authentication_token = p.readString();
         this.id = p.readInt();
+        this.user_type = p.readString();
     }
 
     public String getNames() {
@@ -118,6 +120,11 @@ public class UserCoupon implements Parcelable{
         return id;
     }
 
+    public String getUser_type() {
+        return user_type;
+    }
+
+
 
 
     @Override
@@ -135,6 +142,7 @@ public class UserCoupon implements Parcelable{
         dest.writeString(getGender());
         dest.writeString(getAuthentication_token());
         dest.writeInt(getId());
+        dest.writeString(getUser_type());
     }
 
     public static final Parcelable.Creator<UserCoupon> CREATOR = new Parcelable.Creator<UserCoupon>() {

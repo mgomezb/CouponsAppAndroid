@@ -9,6 +9,7 @@
     <string name="configuration">CONFIGURACIÓN</string>
 
     <string name="configurations">Configuraciones</string>
+    <string name="logout">Logout</string>
 
     <string name="title_tuto_0">Bienvenido a Coupon</string>
     <string name="message_tuto_0"> Con sencillos pasos podrás disfrutar de cientos de descuentos y promociones, que llegarán a tu celular cuando pases cerca de ellos en el mall.</string>
@@ -46,7 +47,10 @@
     <string name="validating">Validando cupón...</string>
     <string name="register_done">Registro exitoso!</string>
     <string name="register_error">Problemas al intentar registrar, Reintente!</string>
+    <string name="login_error">Problemas al intentar loguear, Reintente!</string>
     <string name="registering">Registrando usuario...</string>
+    <string name="identifying">Iniciando sesión....</string>
+    <string name="logout_message">Cerrando sesión....</string>
     <string name="not_show_more">No mostrar más</string>
     <string name="welcome_pak">Bienvenido a Coupon!</string>
     <string name="welcome_pak_text">No olvides encender tu bluetooth para recibir beneficios y descuentos con Coupon.</string>
@@ -56,6 +60,9 @@
     <string name="coupon_validate_code_error">Código erróneo, Reintente!</string>
     <string name="male">Masculino</string>
     <string name="fale">Femenino</string>
+
+    <string name="user_error">Tipo de usuario inválido!</string>
+
 
     <string name="fb_id">614053392038454</string>
     <string name="switch_off"></string>

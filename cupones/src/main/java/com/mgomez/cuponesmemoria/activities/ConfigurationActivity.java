@@ -1,6 +1,7 @@
 package com.mgomez.cuponesmemoria.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 
 import com.mgomez.cuponesmemoria.Constants;
@@ -167,10 +169,15 @@ public class ConfigurationActivity extends Activity {
 
         }
         if(item.getItemId() == R.id.configuration){
-            Intent i = new Intent(ConfigurationActivity.this, Register.class);
+            Intent i = new Intent(ConfigurationActivity.this, Tutorial.class);
             i.putExtra("config", true);
             startActivity(i);
             finish();
+            return true;
+        }
+        if(item.getItemId() == R.id.logout){
+            Toast.makeText(getBaseContext(), "Logout", Toast.LENGTH_LONG).show();
+            new Logout().execute();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -181,8 +188,30 @@ public class ConfigurationActivity extends Activity {
 
         getMenuInflater().inflate(R.menu.coupons, menu);
 
-        //menu.findItem(R.id.configuration).setIcon(R.drawable.info_normal);
+        menu.findItem(R.id.logout).setVisible(true);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private class Logout extends AsyncTask<Void, Boolean, Boolean>{
+
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            pd = ProgressDialog.show(ConfigurationActivity.this, null, getString(R.string.logout_message), true, false);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return couponConnector.logout();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean resp) {
+            configuration.setLogOut(getBaseContext(), Constants.USER);
+            pd.dismiss();
+            finish();
+        }
     }
 }

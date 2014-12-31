@@ -192,17 +192,16 @@ public class ClaimCoupon extends DialogFragment {
         protected void onPostExecute(JSONObject result) {
             if(result!=null){
                 try {
-                    if (result.getInt(Constants.STATUS)!= 200)
+                    if (result.getInt(Constants.STATUS)!= 200) {
                         Toast.makeText(getActivity(), result.getString(Constants.MESSAGE), Toast.LENGTH_LONG).show();
+                        if(result.getInt(Constants.STATUS)==406) {
+                            setClaimedCoupon(coupon.getId());
+                        }
+                    }
                     else{
                         if(result.getInt(Constants.STATUS)== 200) {
-                            CouponDao couponDao = new SQLiteCouponDao(getActivity());
-                            couponDao.setClaimedCoupon(coupon.getId());
-
+                            setClaimedCoupon(coupon.getId());
                             Toast.makeText(getActivity(), getString(R.string.coupon_validate), Toast.LENGTH_LONG).show();
-
-                            ((CouponActivity) getActivity()).setCouponClaimed(position);
-
                             notificationHub.userClaimedCoupon(coupon);
 
                             dismiss();
@@ -217,6 +216,12 @@ public class ClaimCoupon extends DialogFragment {
                 Toast.makeText(getActivity(), getString(R.string.coupon_validate_error), Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    private void setClaimedCoupon(long id){
+        CouponDao couponDao = new SQLiteCouponDao(getActivity());
+        couponDao.setClaimedCoupon(id);
+        ((CouponActivity) getActivity()).setCouponClaimed(position);
     }
 
 

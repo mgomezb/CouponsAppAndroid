@@ -50,6 +50,8 @@ public interface Constants {
     final static String PASSWORD = "password";
     final static String ERROR = "error";
 
+    final static String USER_MOBILE = "mobile";
+
 
 
 

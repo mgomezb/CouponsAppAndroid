@@ -188,6 +188,65 @@ public class WSCouponConnector implements CouponConnector {
             return null;
     }
 
+    @Override
+    public JSONObject login(String email, String password) {
+        try {
+            JSONObject json = new JSONObject();
+            json.put(Constants.EMAIL, email);
+            json.put(Constants.PASSWORD, password);
+
+            JSONObject jsonS = new JSONObject();
+            jsonS.put(Constants.USER, json);
+            String resp = Utils.postRequest(jsonS, Constants.URL_LOGIN);
+
+            if(resp != null){
+                return new JSONObject(resp);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+    @Override
+    public boolean logout() {
+        try {
+            final UserCoupon user = configuration.getUserCoupon(getContext(), Constants.USER, null);
+
+            final String email;
+            final String token;
+
+            if(user!=null) {
+                email = user.getEmail();
+                token = user.getAuthentication_token();
+            }
+            else {
+                email = "";
+                token = "";
+            }
+
+            JSONObject json = new JSONObject();
+            json.put(Constants.EMAIL, email);
+            json.put(Constants.TOKEN, token);
+
+            JSONObject jsonS = new JSONObject();
+            jsonS.put(Constants.USER, json);
+
+
+            int resp = Utils.deleteRequest(Constants.URL_LOGIN, json);
+
+            if(resp == 200)
+                return true;
+            else
+                return false;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private Context getContext(){
         return this.context;
     }
