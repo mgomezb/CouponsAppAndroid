@@ -1,7 +1,12 @@
 package com.mgomez.cuponesmemoria.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +23,7 @@ import com.mgomez.cuponesmemoria.CouponApplication;
 import com.mgomez.cuponesmemoria.R;
 import com.mgomez.cuponesmemoria.adapters.CouponAdapter;
 import com.mgomez.cuponesmemoria.connectors.CouponConnector;
+import com.mgomez.cuponesmemoria.fragments.GeofenceFragment;
 import com.mgomez.cuponesmemoria.model.Coupon;
 import com.mgomez.cuponesmemoria.model.ObjectApiHolder;
 import com.mgomez.cuponesmemoria.persistence.CouponDao;
@@ -61,6 +67,8 @@ public class CouponActivity extends Activity {
         couponConnector = ((CouponApplication) getApplication()).getCouponConnector();
         notificationHub = ((CouponApplication) getApplication()).getNotificationHub();
 
+        startService(new Intent(CouponActivity.this, GetCouponService.class));
+        startGeofenceService();
         updateData();
 
     }
@@ -84,6 +92,43 @@ public class CouponActivity extends Activity {
     public void setCouponClaimed(int position){
         adapter.getItem(position).setClaimed(true);
         adapter.notifyDataSetChanged();
+    }
+
+    private void startGeofenceService() {
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+            if (mBluetoothAdapter != null && !mBluetoothAdapter.isEnabled() && configuration.getProperty(getBaseContext(), Constants.GEOFENCE_ALERT, false)) {
+                showBLEMessage();
+            }
+            if(configuration.getProperty(getBaseContext(), Constants.GEOFENCE, true)) {
+                final FragmentTransaction t = getFragmentManager().beginTransaction();
+                t.add(new GeofenceFragment(), "GeofenceFragment");
+                t.commit();
+                configuration.setProperty(getBaseContext(), Constants.GEOFENCE, false);
+            }
+        }
+    }
+
+    private void showBLEMessage(){
+        AlertDialog.Builder b = new AlertDialog.Builder(CouponActivity.this);
+        b.setTitle("Bluetooth Desactivado");
+        b.setMessage("Para poder recibir cupones dentro del Centro Comercial debes activar el bluetooth de tu dispositivo");
+        b.setCancelable(false);
+        b.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        b.setPositiveButton("Activar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                bluetoothAdapter.enable();
+            }
+        });
+        AlertDialog ad = b.create();
+        ad.show();
     }
 
 

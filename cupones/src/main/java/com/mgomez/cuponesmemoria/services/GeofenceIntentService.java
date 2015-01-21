@@ -52,31 +52,6 @@ public class GeofenceIntentService extends IntentService {
         }
     }
 
-    private void generateNotification() {
-        long when = System.currentTimeMillis();
-
-        Intent notifyIntent = new Intent(this, CouponActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        notifyIntent.putExtra(Constants.GEOFENCE_NOTIFICATION, true);
-
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.icon_notification)
-                        .setContentTitle(getString(R.string.app_name))
-                        .setContentText("Bienvenido a Parque Arauco!")
-                        .setContentIntent(pendingIntent)
-                        .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_SOUND)
-                        .setWhen(when);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify((int) when, builder.build());
-    }
-
     private boolean isMyServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

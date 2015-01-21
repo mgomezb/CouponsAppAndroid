@@ -18,6 +18,7 @@ import com.mgomez.cuponesmemoria.R;
 import com.mgomez.cuponesmemoria.connectors.CouponConnector;
 import com.mgomez.cuponesmemoria.model.UserCoupon;
 import com.mgomez.cuponesmemoria.utilities.Configuration;
+import com.mgomez.cuponesmemoria.utilities.NotificationHub;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +32,7 @@ public class Login extends Activity {
     Configuration configuration;
     Button loginButton, registerButton;
     CouponConnector couponConnector;
+    NotificationHub notificationHub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,9 @@ public class Login extends Activity {
         setContentView(R.layout.login);
         configuration = ((CouponApplication) getApplication()).getConfiguration();
         couponConnector = ((CouponApplication) getApplication()).getCouponConnector();
+        notificationHub = ((CouponApplication) getApplication()).getNotificationHub();
+
+        notificationHub.userOpenApp();
 
         if(configuration.getUserCoupon(getBaseContext(), Constants.USER, null) != null){
             initCouponActivity();
@@ -116,6 +121,7 @@ public class Login extends Activity {
                             configuration.setProperty(getBaseContext(), Constants.TOKEN, user.getAuthentication_token());
                             configuration.setUserCoupon(getBaseContext(), Constants.USER, user);
                             pd.dismiss();
+                            notificationHub.userLoginInApp(user);
                             initCouponActivity();
                         }
                         else

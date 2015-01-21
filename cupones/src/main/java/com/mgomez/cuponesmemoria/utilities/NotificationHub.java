@@ -23,5 +23,6 @@ public abstract class NotificationHub {
 
     public abstract void userReceivesAlert(Notification notification, BeaconNotification bn);
 
+    public abstract void userLoginInApp(UserCoupon userCoupon);
 
 }

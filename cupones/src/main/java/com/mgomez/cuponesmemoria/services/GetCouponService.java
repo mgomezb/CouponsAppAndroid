@@ -60,7 +60,7 @@ public class GetCouponService extends Service {
                 loadData();
                 handler.postDelayed(this, TIME_UPDATE);
             }
-        }, 0);
+        }, 120000);
 
 
         return START_STICKY;

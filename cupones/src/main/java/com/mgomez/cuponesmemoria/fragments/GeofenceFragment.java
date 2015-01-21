@@ -22,13 +22,10 @@ import java.util.ArrayList;
  */
 public class GeofenceFragment extends Fragment implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationClient.OnAddGeofencesResultListener {
 
-    public static final float LATITUDE = (float) -33.402056;
-    public static final float LONGITUDE = (float) -70.577826;
+    public static final float LATITUDE = (float) -33.420211;
+    public static final float LONGITUDE = (float) -70.601320;
     public static final float RADIUS = (float) 700.0D;
 
- //Acid   //-33.420211, -70.601320
-// Arauco 33.402056
-    //70.577826
 
     private LocationClient locationClient;
     private LocationRequest locationRequest;

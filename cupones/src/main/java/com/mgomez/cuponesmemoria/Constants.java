@@ -52,6 +52,8 @@ public interface Constants {
 
     final static String USER_MOBILE = "mobile";
 
+    final static String MIXPANEL_TOKEN = "c14f6536da209ec75aa8af1fa3b15768";
+
 
 
 
@@ -94,5 +96,35 @@ public interface Constants {
         public static final String NAME = "name";
         public static final String STORE_ID = "store_id";
         public static final String COUNT = "count";
+    }
+
+    public interface MixPanel {
+        final public static String APP_OPENED = "Usuario abre aplicacion";
+        final public static String ANDROID_ID = "Android id";
+
+        final public static String USER_RECEIVES_COUPON = "Usuario recibe cupon";
+        final public static String UPDATE_LIST_COUPONS = "App actualiza configuracion de beacons";
+        final public static String USER_CLAIMED_COUPON = "Usuario canjea cupon";
+        final public static String USER_REGISTERED = "Usuario se registra";
+        final public static String USER_RECEIVES_ALERT = "Usuario recibe alerta";
+        final public static String USER_RUT = "RUT usuario";
+
+        final public static String COUPON_ID = "Identificador cupon";
+        final public static String COUPON_TITLE = "Titulo cupon";
+        final public static String PROXIMITY_UUID = "ProximityUUID del beacon";
+        final public static String MAJOR = "Major del beacon";
+        final public static String MINOR = "Minor del beacon";
+
+        final public static String DATE_UPDATE_BEACONS = "Fecha configuracion de beacons";
+
+        final public static String USER_NAME = "Nombre completo usuario";
+        final public static String USER_EMAIL = "Email usuario";
+
+        final public static String ALERT_ID = "Identificador alerta";
+        final public static String ALERT_TITLE = "Titulo alerta";
+
+        final public static String USER_LOGED = "Usuario se loguea";
+
+
     }
 }

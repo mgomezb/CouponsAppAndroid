@@ -88,6 +88,7 @@
     <orderEntry type="library" exported="" name="picasso-2.3.4" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.0" level="project" />
     <orderEntry type="library" exported="" name="AndroidIBeaconLibrary-0.7.6" level="project" />
+    <orderEntry type="library" exported="" name="mixpanel-android-4.5.3" level="project" />
     <orderEntry type="library" exported="" name="facebook-android-sdk-3.8.0" level="project" />
     <orderEntry type="library" exported="" name="joda-time-2.5" level="project" />
     <orderEntry type="library" exported="" name="play-services-5.0.89" level="project" />
