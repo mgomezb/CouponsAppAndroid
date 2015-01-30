@@ -20,14 +20,14 @@ public class UserCoupon implements Parcelable{
     String user_type;
 
 
-    public UserCoupon(String name, String last_name, String rut, String email, String address, String gender){
+    public UserCoupon(String name, String last_name, String rut, String email, String address, String gender, String password, boolean newUser){
         this.name = name;
         this.last_name = last_name;
         this.rut = rut;
         this.email = email;
         this.address = address;
         this.gender = gender;
-        this.password = "manolete";
+        this.password = password;
     }
 
     public UserCoupon(String name, String last_name, String rut, String email, String address, String gender, String token){

@@ -52,9 +52,9 @@ public class Login extends Activity {
     }
 
     private void setViews() {
-        loginButton = (Button) findViewById(R.id.login);
+        loginButton = (Button) findViewById(R.id.sign_in);
         registerButton = (Button) findViewById(R.id.register);
-        email = (EditText) findViewById(R.id.email);
+        email = (EditText) findViewById(R.id.user);
         password = (EditText) findViewById(R.id.password);
 
         loginButton.setOnClickListener(new View.OnClickListener() {

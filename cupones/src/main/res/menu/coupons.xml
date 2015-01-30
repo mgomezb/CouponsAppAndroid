@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/notifications"
+        android:icon="@drawable/notify_active"
+        android:showAsAction="always"
+        android:title="@string/notifications_menu"/>
     <item android:id="@+id/configuration"
-        android:icon="@drawable/menu_tools"
-        android:showAsAction="always"
+        android:showAsAction="never"
         android:title="@string/configurations"/>
-    <item android:id="@+id/logout"
-        android:icon="@drawable/logout"
-        android:showAsAction="always"
-        android:visible="false"
-        android:title="@string/logout"/>
 </menu>

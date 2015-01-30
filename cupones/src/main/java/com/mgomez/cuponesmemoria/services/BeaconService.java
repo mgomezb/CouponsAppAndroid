@@ -158,7 +158,7 @@ public class BeaconService extends Service implements IBeaconConsumer, MonitorNo
                     notificationHub.userReceivesAlert(a, bn);
 
                     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplication())
-                            .setSmallIcon(R.drawable.icon_notification)
+                            .setSmallIcon(R.drawable.ic_launcher)
                             .setContentTitle(a.getTitle())
                             .setContentText(a.getMessage())
                             .setContentIntent(resultPendingIntent)
@@ -221,7 +221,7 @@ public class BeaconService extends Service implements IBeaconConsumer, MonitorNo
 
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplication())
-                        .setSmallIcon(R.drawable.icon_notification)
+                        .setSmallIcon(R.drawable.ic_launcher)
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText(message)
                         .setAutoCancel(true)

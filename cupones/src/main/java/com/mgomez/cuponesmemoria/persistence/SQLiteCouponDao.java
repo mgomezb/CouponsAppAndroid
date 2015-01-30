@@ -1,13 +1,25 @@
 package com.mgomez.cuponesmemoria.persistence;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 
+import com.mgomez.cuponesmemoria.Constants;
+import com.mgomez.cuponesmemoria.CouponApplication;
+import com.mgomez.cuponesmemoria.R;
+import com.mgomez.cuponesmemoria.activities.CouponActivity;
+import com.mgomez.cuponesmemoria.activities.NotificationActivity;
 import com.mgomez.cuponesmemoria.model.BeaconNotification;
 import com.mgomez.cuponesmemoria.model.Coupon;
 import com.mgomez.cuponesmemoria.model.Notification;
+import com.mgomez.cuponesmemoria.utilities.Configuration;
+import com.mgomez.cuponesmemoria.utilities.NotificationHub;
 import com.mgomez.cuponesmemoria.utilities.Utils;
 import com.radiusnetworks.ibeacon.IBeacon;
 import com.mgomez.cuponesmemoria.Constants.DB;
@@ -26,6 +38,8 @@ public class SQLiteCouponDao implements CouponDao {
 
 
     private static SQLiteCouponDao mInstance = null;
+    private NotificationHub notificationHub;
+    private Configuration configuration;
 
     /**
      * Singleton
@@ -42,10 +56,23 @@ public class SQLiteCouponDao implements CouponDao {
 
     private SQLiteHelper sqLiteHelper;
     private SQLiteDatabase db;
+    private Context context;
 
     public SQLiteCouponDao(Context context){
+        this.context = context;
         sqLiteHelper = new SQLiteHelper(context);
         db = sqLiteHelper.getWritableDatabase();
+        notificationHub = ((CouponApplication) context.getApplicationContext()).getNotificationHub();
+        configuration = ((CouponApplication) context.getApplicationContext()).getConfiguration();
+    }
+
+    @Override
+    public void dropDataBase(){
+        sqLiteHelper.dropAllTables(sqLiteHelper.getReadableDatabase());
+    }
+
+    private Context getContext(){
+        return context;
     }
 
     @Override
@@ -73,8 +100,8 @@ public class SQLiteCouponDao implements CouponDao {
 
         db.insert(DB.BEACONS_TABLE, null, values);
 
-       insertRelationBeaconsCoupons(beaconNotification.getId(), beaconNotification.getCoupons_ids());
-       insertRelationBeaconsNotifications(beaconNotification.getId(), beaconNotification.getNotifications_ids());
+        insertRelationBeaconsCoupons(beaconNotification.getId(), beaconNotification.getCoupons_ids());
+        insertRelationBeaconsNotifications(beaconNotification.getId(), beaconNotification.getNotifications_ids());
     }
 
     private void insertRelationBeaconsCoupons(long idBeacons, int[] idsCoupons) {
@@ -100,8 +127,19 @@ public class SQLiteCouponDao implements CouponDao {
     private void insertCoupon(Coupon c) {
 
         if(c.getAccess_level().equals(Coupon.Types.PUBLIC.toString())) {
-            if(!existCoupon(c.getId()))
-                insertMyCoupons(c);
+            if(!existCoupon(c.getId()) && Utils.isCurrent(c.getEnd_date())) {
+                if(configuration.getProperty(getContext(), Constants.COUPONS_ACTIVATE, true)) {
+                    insertMyCoupons(c);
+                    showNotificationCoupon(c);
+                }
+                else{
+                    if(isFilterConfiguration(c.getCategory())){
+                        insertMyCoupons(c);
+                        showNotificationCoupon(c);
+                    }
+                }
+            }
+
         }
 
         ContentValues values = new ContentValues();
@@ -123,6 +161,28 @@ public class SQLiteCouponDao implements CouponDao {
         values.put(DB.STORE_ID, c.getStore_id());
 
         db.insert(DB.COUPONS_TABLE, null, values);
+    }
+
+    private void showNotificationCoupon(Coupon coupon){
+        long[] vibrate = {300, 1000};
+        Intent resultIntent = new Intent(getContext(), CouponActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(getContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationHub.userReceivesCoupon(coupon, null);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext())
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle(coupon.getTitle())
+                .setContentText(coupon.getMessage())
+                .setAutoCancel(true)
+                .setVibrate(vibrate)
+                .setContentIntent(resultPendingIntent)
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+        // Builds the notification and issues it.
+        ((NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE)).notify((int) coupon.getId(), mBuilder.build());
     }
 
     @Override
@@ -164,8 +224,11 @@ public class SQLiteCouponDao implements CouponDao {
     private void insertNotification(Notification notification) {
 
         if(notification.getAccess_level().equals(Coupon.Types.PUBLIC.toString())) {
-            if(!existCoupon(notification.getId()))
+            if(!existNotification(notification.getId()) && configuration.getProperty(getContext(), Constants.NOTIFICATIONS_ACTIVATE, true)) {
                 insertMyNotification(notification);
+                showNotification(notification);
+            }
+
         }
 
         ContentValues values = new ContentValues();
@@ -180,6 +243,29 @@ public class SQLiteCouponDao implements CouponDao {
 
         db.insert(DB.NOTIFICATION_TABLE, null, values);
 
+    }
+
+    private void showNotification(Notification n){
+        notificationHub.userReceivesAlert(n, null);
+
+        final long[] vibrate = {300, 1000};
+        Intent resultIntent = new Intent(getContext(), NotificationActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(getContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext())
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle(n.getTitle())
+                .setContentText(n.getMessage())
+                .setContentIntent(resultPendingIntent)
+                .setAutoCancel(true)
+                .setVibrate(vibrate)
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+
+        // Builds the notification and issues it.
+        ((NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE)).notify((int) n.getId(), mBuilder.build());
     }
 
     @Override
@@ -227,8 +313,8 @@ public class SQLiteCouponDao implements CouponDao {
     public synchronized BeaconNotification getBeaconNotification(IBeacon beacon){
 
         final String sql = "Select * from "+DB.BEACONS_TABLE+" where "+DB.MINOR+" = '"+beacon.getMinor()+"' " +
-                           "AND "+DB.MAYOR+" = '"+beacon.getMajor()+"' " +
-                           "AND "+DB.PROXIMITY_UUID+" = '"+beacon.getProximityUuid()+"' COLLATE NOCASE ";
+                "AND "+DB.MAYOR+" = '"+beacon.getMajor()+"' " +
+                "AND "+DB.PROXIMITY_UUID+" = '"+beacon.getProximityUuid()+"' COLLATE NOCASE ";
 
 
         Cursor c = db.rawQuery(sql, null);

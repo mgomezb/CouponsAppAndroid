@@ -38,7 +38,6 @@ public interface Constants {
     final static String GEOFENCE_NOTIFICATION = "geofence_notification";
 
     final static String GEOFENCE_ALERT = "geofence_alert";
-    final public static String ALERTS_ACTIVATE = "alerts_activate";
 
     final static String NAME = "name";
     final static String LAST_NAME = "last_name";
@@ -111,6 +110,8 @@ public interface Constants {
 
         final public static String COUPON_ID = "Identificador cupon";
         final public static String COUPON_TITLE = "Titulo cupon";
+        final public static String COUPON_TYPE = "Tipo cupon";
+
         final public static String PROXIMITY_UUID = "ProximityUUID del beacon";
         final public static String MAJOR = "Major del beacon";
         final public static String MINOR = "Minor del beacon";
@@ -122,6 +123,8 @@ public interface Constants {
 
         final public static String ALERT_ID = "Identificador alerta";
         final public static String ALERT_TITLE = "Titulo alerta";
+
+        final public static String ALERT_TYPE = "Tipo alerta";
 
         final public static String USER_LOGED = "Usuario se loguea";
 

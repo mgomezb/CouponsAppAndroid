@@ -56,7 +56,7 @@ import java.util.Arrays;
 public class Register extends Activity {
 
 
-    FloatLabeledEditText name, lastName, rut, email, genre;
+    FloatLabeledEditText name, lastName, rut, email, genre, password1, password2;
     FloatLabeledAutoComplete address;
     private ArrayAdapter<String> genreAdapter;
     Button buttonRegister;
@@ -99,6 +99,8 @@ public class Register extends Activity {
         email = (FloatLabeledEditText) findViewById(R.id.email);
         address = (FloatLabeledAutoComplete) findViewById(R.id.address);
         genre = (FloatLabeledEditText) findViewById(R.id.genre);
+        password1 = (FloatLabeledEditText) findViewById(R.id.password);
+        password2 = (FloatLabeledEditText) findViewById(R.id.password2);
         buttonRegister = (Button) findViewById(R.id.button_register);
 
         authButton.setReadPermissions(Arrays.asList("email"));
@@ -108,6 +110,10 @@ public class Register extends Activity {
         rut.setSingleLine(true);
         email.setSingleLine(true);
         email.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        password1.setSingleLine(true);
+        password1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        password2.setSingleLine(true);
+        password2.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         address.setSingleLine(true);
 
@@ -262,6 +268,16 @@ public class Register extends Activity {
             done = false;
         }
 
+        if(password1.getText().toString().length() < 0){
+            password1.setError(getString(R.string.password_empty_error));
+            done = false;
+        }
+
+        if(!password1.getText().toString().equals(password2.getText().toString())){
+            password2.setError(getString(R.string.password_error));
+            done = false;
+        }
+
         return done;
     }
 
@@ -294,12 +310,13 @@ public class Register extends Activity {
             final String last_names = lastName.getText().toString();
             final String rutString = rut.getText().toString();
             final String emailString = email.getText().toString();
+            final String password = password1.getText().toString();
 
             final String addressString = address.getText().toString();
             if(!genre.getText().toString().isEmpty())
                 gender = genre.getText().toString().substring(0,1);
 
-            userCoupon = new UserCoupon(names, last_names, rutString, emailString, addressString, gender);
+            userCoupon = new UserCoupon(names, last_names, rutString, emailString, addressString, gender, password, true);
         }
 
         @Override

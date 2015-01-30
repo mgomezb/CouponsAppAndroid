@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mgomez.cuponesmemoria.CouponApplication;
@@ -25,14 +24,15 @@ import java.util.ArrayList;
 /**
  * Created by MGomez on 11-06-14.
  */
-public class NotificationActivity extends Activity {
+public class NotificationActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener{
 
     ListView notificationList;
-    ProgressBar progressBar;
     NotificationAdapter adapter;
     ArrayList<Notification> notifications;
     TextView message;
     CouponDao couponDao;
+    SwipeRefreshLayout swipeView;
+
 
 
     @Override
@@ -41,21 +41,28 @@ public class NotificationActivity extends Activity {
 
         setContentView(R.layout.notification_list);
         notificationList = (ListView) findViewById(R.id.list_notifications);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         message = (TextView) findViewById(R.id.message_no_notifications);
+        swipeView = (SwipeRefreshLayout) findViewById(R.id.swipe);
+        swipeView.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_blue_light), getResources().getColor(android.R.color.holo_blue_dark));
+        swipeView.setOnRefreshListener(this);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         couponDao = ((CouponApplication) getApplication()).getCouponDao();
 
 
+        onRefresh();
+
+    }
+
+    @Override
+    public void onRefresh() {
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
             new LoadData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
         else {
             new LoadData().execute();
         }
-
     }
 
     private class LoadData extends AsyncTask<Void, Void, NotificationAdapter> {
@@ -63,8 +70,7 @@ public class NotificationActivity extends Activity {
 
         @Override
         protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-
+            swipeView.setRefreshing ( true );
         }
 
         @Override
@@ -83,9 +89,10 @@ public class NotificationActivity extends Activity {
 
         @Override
         protected void onPostExecute(final NotificationAdapter adapterResult) {
-            progressBar.setVisibility(View.GONE);
+            swipeView.setRefreshing(false);
             adapter = adapterResult;
             notificationList.setAdapter(adapter);
+
 
             if(adapter.getCount()==0)
                 message.setVisibility(View.VISIBLE);
@@ -122,36 +129,15 @@ public class NotificationActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if(CouponActivity.active)
+                    finish();
+                else{
+                    startActivity(new Intent(this, CouponActivity.class));
+                    finish();
+                }
                 return true;
 
         }
-        if(item.getItemId() == R.id.configuration){
-            startActivity(new Intent(NotificationActivity.this, ConfigurationActivity.class));
-            return true;
-        }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.coupons, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    static boolean active = false;
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        active = true;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        active = false;
     }
 }

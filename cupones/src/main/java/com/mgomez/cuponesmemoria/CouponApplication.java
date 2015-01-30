@@ -19,7 +19,6 @@ public class CouponApplication extends Application {
     CouponConnector couponConnector;
     CouponDao couponDao;
     Configuration configuration;
-    NotificationHub notificationHub;
 
     @Override
     public void onCreate() {
@@ -27,7 +26,6 @@ public class CouponApplication extends Application {
         configuration = new SharedPreferencesConfiguration();
         couponConnector = new WSCouponConnector(getBaseContext());
         couponDao = SQLiteCouponDao.getInstance(getBaseContext());
-        notificationHub = MixPanelNotification.getInstance(getBaseContext());
     }
 
     public CouponConnector getCouponConnector() {
@@ -43,6 +41,6 @@ public class CouponApplication extends Application {
     }
 
     public NotificationHub getNotificationHub(){
-        return notificationHub;
+        return MixPanelNotification.getInstance(getBaseContext());
     }
 }

@@ -60,5 +60,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void dropAllTables(SQLiteDatabase db){
+        db.execSQL("DROP TABLE IF EXISTS "+DB.BEACONS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.COUPONS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.NOTIFICATION_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.BEACONS_COUPONS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.BEACONS_NOTIFICATIONS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.CATEGORIES_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.MY_COUPONS_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.MY_NOTIFICATION_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+DB.CONFIGURATION_TABLE);
+        onCreate(db);
+    }
+
 
 }

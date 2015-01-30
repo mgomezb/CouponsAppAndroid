@@ -1,7 +1,9 @@
 package com.mgomez.cuponesmemoria.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -90,7 +92,7 @@ public class ConfigurationActivity extends Activity {
     private CompoundButton.OnCheckedChangeListener generalInformationListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-            configuration.setProperty(getBaseContext(), Constants.ALERTS_ACTIVATE, checked);
+            configuration.setProperty(getBaseContext(), Constants.NOTIFICATIONS_ACTIVATE, checked);
         }
     };
 
@@ -168,7 +170,7 @@ public class ConfigurationActivity extends Activity {
                 return true;
 
         }
-        if(item.getItemId() == R.id.configuration){
+        if(item.getItemId() == R.id.tutorial){
             Intent i = new Intent(ConfigurationActivity.this, Tutorial.class);
             i.putExtra("config", true);
             startActivity(i);
@@ -176,19 +178,38 @@ public class ConfigurationActivity extends Activity {
             return true;
         }
         if(item.getItemId() == R.id.logout){
-            Toast.makeText(getBaseContext(), "Logout", Toast.LENGTH_LONG).show();
-            new Logout().execute();
+            logoutDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void logoutDialog(){
+        AlertDialog.Builder b = new AlertDialog.Builder(ConfigurationActivity.this);
+        b.setTitle("Cerrar Sesión");
+        b.setMessage("Si cierras sesión se borrarán todos tus cupones y tendrás que volver a capturarlos.\n¿Deseas continuar?");
+        b.setCancelable(false);
+        b.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        b.setPositiveButton("Cerrar Sesión", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                new Logout().execute();
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog ad = b.create();
+        ad.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.coupons, menu);
-
-        menu.findItem(R.id.logout).setVisible(true);
+        getMenuInflater().inflate(R.menu.configurations, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -210,6 +231,7 @@ public class ConfigurationActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean resp) {
             configuration.setLogOut(getBaseContext(), Constants.USER);
+            couponDao.dropDataBase();
             pd.dismiss();
             finish();
         }

@@ -89,10 +89,13 @@ public class MixPanelHelper {
 
             p.put(Constants.MixPanel.COUPON_ID, coupon.getId());
             p.put(Constants.MixPanel.COUPON_TITLE, coupon.getTitle());
-            p.put(Constants.MixPanel.PROXIMITY_UUID, bn.getProximity_uuid());
-            p.put(Constants.MixPanel.MAJOR, bn.getMayor());
-            p.put(Constants.MixPanel.MINOR, bn.getMinor());
+            p.put(Constants.MixPanel.COUPON_TYPE, coupon.getAccess_level());
 
+            if(bn != null) {
+                p.put(Constants.MixPanel.PROXIMITY_UUID, bn.getProximity_uuid());
+                p.put(Constants.MixPanel.MAJOR, bn.getMayor());
+                p.put(Constants.MixPanel.MINOR, bn.getMinor());
+            }
             addGlobalProperties(c, p);
 
         } catch (JSONException e) { }
@@ -169,9 +172,12 @@ public class MixPanelHelper {
 
             p.put(Constants.MixPanel.ALERT_ID, notification.getId());
             p.put(Constants.MixPanel.ALERT_TITLE, notification.getTitle());
-            p.put(Constants.MixPanel.PROXIMITY_UUID, bn.getProximity_uuid());
-            p.put(Constants.MixPanel.MAJOR, bn.getMayor());
-            p.put(Constants.MixPanel.MINOR, bn.getMinor());
+            p.put(Constants.MixPanel.ALERT_TYPE, notification.getAccess_level());
+            if(bn != null) {
+                p.put(Constants.MixPanel.PROXIMITY_UUID, bn.getProximity_uuid());
+                p.put(Constants.MixPanel.MAJOR, bn.getMayor());
+                p.put(Constants.MixPanel.MINOR, bn.getMinor());
+            }
 
             addGlobalProperties(c, p);
 

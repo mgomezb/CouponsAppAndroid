@@ -11,11 +11,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mgomez.cuponesmemoria.Constants;
@@ -39,13 +39,14 @@ import java.util.Arrays;
 /**
  * Created by mgomezacid on 06-05-14.
  */
-public class CouponActivity extends Activity {
+public class CouponActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener{
 
     ListView couponsList;
-    ProgressBar progressBar;
     CouponAdapter adapter;
     long couponIP;
     TextView message;
+    SwipeRefreshLayout swipeView;
+
 
     CouponDao couponDao;
     Configuration configuration;
@@ -59,8 +60,11 @@ public class CouponActivity extends Activity {
         couponIP = getIntent().getLongExtra(Constants.COUPON, 0);
         setContentView(R.layout.coupons_list);
         couponsList = (ListView) findViewById(R.id.list_coupons);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         message = (TextView) findViewById(R.id.message_no_coupons);
+        swipeView = (SwipeRefreshLayout) findViewById(R.id.swipe);
+        swipeView.setColorSchemeColors(getResources().getColor(android.R.color.holo_blue_bright), getResources().getColor(android.R.color.holo_blue_light), getResources().getColor(android.R.color.holo_blue_dark));
+        swipeView.setOnRefreshListener(this);
+
 
         couponDao = ((CouponApplication) getApplication()).getCouponDao();
         configuration = ((CouponApplication) getApplication()).getConfiguration();
@@ -69,7 +73,8 @@ public class CouponActivity extends Activity {
 
         startService(new Intent(CouponActivity.this, GetCouponService.class));
         startGeofenceService();
-        updateData();
+        loadData();
+        onRefresh();
 
     }
 
@@ -131,12 +136,21 @@ public class CouponActivity extends Activity {
         ad.show();
     }
 
+    @Override
+    public void onRefresh() {
+        updateData();
+    }
+
 
     private class LoadData extends AsyncTask<Void, Void, CouponAdapter>{
 
         @Override
         protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
+            swipeView.post ( new  Runnable ()  {
+                @Override  public  void run ()  {
+                    swipeView.setRefreshing ( true );
+                }
+            });
         }
 
         @Override
@@ -158,7 +172,7 @@ public class CouponActivity extends Activity {
 
         @Override
         protected void onPostExecute(final CouponAdapter adapterResult) {
-            progressBar.setVisibility(View.GONE);
+            swipeView.setRefreshing(false);
             adapter = adapterResult;
             couponsList.setAdapter(adapter);
 
@@ -181,6 +195,10 @@ public class CouponActivity extends Activity {
         }
         if(item.getItemId() == R.id.configuration){
             startActivity(new Intent(CouponActivity.this, ConfigurationActivity.class));
+            return true;
+        }
+        if(item.getItemId() == R.id.notifications){
+            startActivity(new Intent(CouponActivity.this, NotificationActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -236,9 +254,6 @@ public class CouponActivity extends Activity {
                 else {
                     new SetDB().execute(data);
                 }
-            }
-            else {
-                loadData();
             }
         }
     }

@@ -9,7 +9,9 @@
     <string name="configuration">CONFIGURACIÓN</string>
 
     <string name="configurations">Configuraciones</string>
+    <string name="notifications_menu">Notificaciones</string>
     <string name="logout">Logout</string>
+    <string name="tutorial">Tutorial</string>
 
     <string name="title_tuto_0">Bienvenido a Coupon</string>
     <string name="message_tuto_0"> Con sencillos pasos podrás disfrutar de cientos de descuentos y promociones, que llegarán a tu celular cuando pases cerca de ellos en el mall.</string>
@@ -41,8 +43,8 @@
     <string name="coupon_date_end">Cupón válido hasta el</string>
     <string name="loading_data">Cargando datos...</string>
 
-    <string name="rut_error">RUT Inválido"</string>
-    <string name="email_error">E-mail Inválido"</string>
+    <string name="rut_error">RUT Inválido</string>
+    <string name="email_error">E-mail Inválido</string>
     <string name="error_empty">Campo Obligatorio!</string>
     <string name="validating">Validando cupón...</string>
     <string name="register_done">Registro exitoso!</string>
@@ -61,8 +63,16 @@
     <string name="male">Masculino</string>
     <string name="fale">Femenino</string>
 
+    <string name="password_empty_error">Contraseña vacia</string>
+    <string name="password_error">Las contraseñas no coinciden</string>
+
     <string name="user_error">Tipo de usuario inválido!</string>
 
+    <string name="sign_in">INGRESAR</string>
+
+    <string name="register_login">Registar</string>
+    <string name="email">E-mail</string>
+    <string name="password">Contraseña</string>
 
     <string name="fb_id">614053392038454</string>
     <string name="switch_off"></string>

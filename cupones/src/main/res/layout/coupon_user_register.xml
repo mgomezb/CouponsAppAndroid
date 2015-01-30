@@ -93,6 +93,22 @@
                 android:lines="1"
                 android:id="@+id/genre" />
 
+            <com.mgomez.cuponesmemoria.views.FloatLabeledEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:floatingHint="Contraseña"
+                android:inputType="textPassword"
+                android:lines="1"
+                android:id="@+id/password" />
+
+            <com.mgomez.cuponesmemoria.views.FloatLabeledEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:floatingHint="Confirmar Contraseña"
+                android:inputType="textPassword"
+                android:lines="1"
+                android:id="@+id/password2" />
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

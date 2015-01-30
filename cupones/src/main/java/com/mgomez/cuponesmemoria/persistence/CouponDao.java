@@ -12,6 +12,8 @@ import java.util.List;
  * Created by MGomez on 11-06-14.
  */
 public interface CouponDao {
+    void dropDataBase();
+
     void insertBeacons(List<BeaconNotification> beaconNotifications);
 
     void insertCoupons(List<Coupon> coupons);

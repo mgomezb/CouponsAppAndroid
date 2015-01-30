@@ -102,7 +102,7 @@ public class CouponAdapter extends ArrayAdapter<Coupon> {
         }
 
 
-        Picasso.with(context).load(coupon.getUrlImage()).centerCrop().fit().placeholder(R.drawable.imgplaceholder3).into(couponHolder.image);
+        Picasso.with(context).load(coupon.getImage_url()).centerCrop().fit().placeholder(R.drawable.imgplaceholder3).into(couponHolder.image);
         return  v;
     }
 

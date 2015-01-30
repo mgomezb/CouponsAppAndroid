@@ -98,10 +98,6 @@ public class Coupon implements Parcelable{
         this.use_instructions = p.readString();
     }
 
-    public String getUrlImage(){
-        return Constants.SERVER+getImage_url();
-    }
-
     public long getId() {
         return id;
     }
