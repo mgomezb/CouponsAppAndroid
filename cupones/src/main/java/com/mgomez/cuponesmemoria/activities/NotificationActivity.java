@@ -77,13 +77,14 @@ public class NotificationActivity extends Activity implements SwipeRefreshLayout
         protected NotificationAdapter doInBackground(Void... params) {
 
             notifications = couponDao.getMyNotifications();
+            ArrayList<Notification> notificationsA = new ArrayList<>(notifications.size());
 
             for(Notification a : notifications){
-                if(!Utils.isCurrent(a.getEnd_date()))
-                    notifications.remove(a);
+                if(Utils.isCurrent(a.getEnd_date()))
+                    notificationsA.add(a);
             }
 
-            return new NotificationAdapter(getBaseContext(),  notifications);
+            return new NotificationAdapter(getBaseContext(),  notificationsA);
 
         }
 
