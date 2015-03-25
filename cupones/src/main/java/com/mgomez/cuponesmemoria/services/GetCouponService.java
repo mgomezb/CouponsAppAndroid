@@ -115,8 +115,10 @@ public class GetCouponService extends Service {
                 if(objectApiHolder.getBeaconNotifications()!=null)
                     couponDao.insertBeacons(Arrays.asList(objectApiHolder.getBeaconNotifications()));
 
-                if(objectApiHolder.getAlerts()!=null)
+                if(objectApiHolder.getAlerts()!=null) {
                     couponDao.insertNotifications(Arrays.asList(objectApiHolder.getAlerts()));
+                    couponDao.updateMyNotifications();
+                }
 
                 if(objectApiHolder.getCoupons()!=null){
                     couponDao.insertCoupons(Arrays.asList(objectApiHolder.getCoupons()));

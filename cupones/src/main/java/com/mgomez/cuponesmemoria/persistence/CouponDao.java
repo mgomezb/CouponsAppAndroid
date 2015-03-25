@@ -65,4 +65,6 @@ public interface CouponDao {
     boolean existNotification(long id);
 
     void updateMyCoupons();
+
+    void updateMyNotifications();
 }

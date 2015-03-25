@@ -394,7 +394,7 @@ public class SQLiteCouponDao implements CouponDao {
         ArrayList<Notification> notifications = new ArrayList<Notification>();
 
 
-        Cursor c = db.query(DB.COUPONS_TABLE, null, DB.VISIBLE+" =?", new String[]{"1"}, null,null,null);
+        Cursor c = db.query(DB.NOTIFICATION_TABLE,null, null, null, null,null,null);
         if(c.moveToFirst()) {
             do{
                 notifications.add(createEntityNotification(c));
@@ -710,6 +710,23 @@ public class SQLiteCouponDao implements CouponDao {
         }
     }
 
+    @Override
+    public void updateMyNotifications() {
+        final ArrayList<Notification> myNotifications = getMyNotifications();
+        for(Notification n : myNotifications){
+            boolean exist = false;
+            for(Notification notification: getNotificationsVisibles()){
+                if(notification.getId() == n.getId()) {
+                    exist = true;
+                    updateNotification(notification);
+                }
+            }
+            if(!exist){
+                expiredNotification(n.getId());
+            }
+        }
+    }
+
     private boolean updateCoupon(Coupon c) {
 
         ContentValues values = new ContentValues();
@@ -729,12 +746,34 @@ public class SQLiteCouponDao implements CouponDao {
         return update;
     }
 
+    private boolean updateNotification(Notification notification) {
+
+        ContentValues values = new ContentValues();
+        values.put(DB.TITLE, notification.getTitle());
+        values.put(DB.MESSAGE, notification.getMessage());
+        values.put(DB.PROXIMITY_TRIGGER_RANGE, notification.getProximity_trigger_range());
+        values.put(DB.INIT_DATE, notification.getInit_date());
+        values.put(DB.END_DATE, notification.getEnd_date());
+
+        boolean update = db.update(DB.MY_NOTIFICATION_TABLE, values ,DB.ID + " = ?", new String[]{""+notification.getId()}) > 0;
+        return update;
+    }
+
     private boolean expiredCoupon(long idMyCoupon) {
 
         ContentValues values = new ContentValues();
         values.put(DB.END_DATE, "2014-11-30T10:28:00.000Z");
 
         boolean update = db.update(DB.MY_COUPONS_TABLE, values ,DB.ID + " = ?", new String[]{""+idMyCoupon}) > 0;
+        return update;
+    }
+
+    private boolean expiredNotification(long idMyNotification) {
+
+        ContentValues values = new ContentValues();
+        values.put(DB.END_DATE, "2014-11-30T10:28:00.000Z");
+
+        boolean update = db.update(DB.MY_NOTIFICATION_TABLE, values ,DB.ID + " = ?", new String[]{""+idMyNotification}) > 0;
         return update;
     }
 

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CuponesMemoria.iml" filepath="$PROJECT_DIR$/CuponesMemoria.iml" />
       <module fileurl="file://$PROJECT_DIR$/cupones/cupones.iml" filepath="$PROJECT_DIR$/cupones/cupones.iml" />
+      <module fileurl="file://$PROJECT_DIR$/viewpagerindicator/viewpagerindicator.iml" filepath="$PROJECT_DIR$/viewpagerindicator/viewpagerindicator.iml" />
       <module fileurl="file://$PROJECT_DIR$/viewpagerindicator/viewpagerindicator/viewpagerindicator-viewpagerindicator.iml" filepath="$PROJECT_DIR$/viewpagerindicator/viewpagerindicator/viewpagerindicator-viewpagerindicator.iml" />
     </modules>
   </component>

@@ -41,14 +41,14 @@
         <activity android:name=".activities.Register"
             android:screenOrientation="portrait"/>
 
-        <service android:name=".services.BeaconService" android:exported="false">
+        <service android:name=".services.BeaconService" android:exported="true">
             <intent-filter>
                 <action android:name="com.mgomez.cuponesmemoria.services.BeaconService"/>
             </intent-filter>
         </service>
 
         <service android:name=".services.GeofenceIntentService"
-            android:exported="false"/>
+            android:exported="true"/>
 
         <service android:name=".services.GetCouponService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
