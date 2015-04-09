@@ -49,7 +49,7 @@ public class ReceiverBoot extends BroadcastReceiver implements GooglePlayService
     @Override
     public void onConnected(Bundle bundle) {
 
-        Log.d("ReceiverBoot#onConnected", "Init Service");
+        Log.d("onConnected", "Init Service");
         locationRequest = LocationRequest.create();
         locationRequest.setInterval(5 * 50 * 1000);
         locationRequest.setFastestInterval(5 * 50 * 1000);
@@ -80,7 +80,7 @@ public class ReceiverBoot extends BroadcastReceiver implements GooglePlayService
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e("ReceiverBoot#onConnectionFailed", connectionResult.toString());
+        Log.e("onConnectionFailed", connectionResult.toString());
     }
 
     @Override

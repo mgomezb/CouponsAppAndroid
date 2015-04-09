@@ -163,26 +163,28 @@ public class SQLiteCouponDao implements CouponDao {
         db.insert(DB.COUPONS_TABLE, null, values);
     }
 
-    private void showNotificationCoupon(Coupon coupon){
-        long[] vibrate = {300, 1000};
-        Intent resultIntent = new Intent(getContext(), CouponActivity.class);
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    private void showNotificationCoupon(Coupon coupon) {
+        if (Utils.isCurrent(coupon.getEnd_date())) {
+            long[] vibrate = {300, 1000};
+            Intent resultIntent = new Intent(getContext(), CouponActivity.class);
+            resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(getContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(getContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        notificationHub.userReceivesCoupon(coupon, null);
+            notificationHub.userReceivesCoupon(coupon, null);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext())
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle(coupon.getTitle())
-                .setContentText(coupon.getMessage())
-                .setAutoCancel(true)
-                .setVibrate(vibrate)
-                .setContentIntent(resultPendingIntent)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-        // Builds the notification and issues it.
-        ((NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE)).notify((int) coupon.getId(), mBuilder.build());
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext())
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setContentTitle(coupon.getTitle())
+                    .setContentText(coupon.getMessage())
+                    .setAutoCancel(true)
+                    .setVibrate(vibrate)
+                    .setContentIntent(resultPendingIntent)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+            // Builds the notification and issues it.
+            ((NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE)).notify((int) coupon.getId(), mBuilder.build());
+        }
     }
 
     @Override
@@ -245,27 +247,32 @@ public class SQLiteCouponDao implements CouponDao {
 
     }
 
-    private void showNotification(Notification n){
-        notificationHub.userReceivesAlert(n, null);
+    private void showNotification(Notification n) {
 
-        final long[] vibrate = {300, 1000};
-        Intent resultIntent = new Intent(getContext(), NotificationActivity.class);
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if(Utils.isCurrent(n.getEnd_date())) {
 
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(getContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notificationHub.userReceivesAlert(n, null);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext())
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle(n.getTitle())
-                .setContentText(n.getMessage())
-                .setContentIntent(resultPendingIntent)
-                .setAutoCancel(true)
-                .setVibrate(vibrate)
-                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+            final long[] vibrate = {300, 1000};
+            Intent resultIntent = new Intent(getContext(), NotificationActivity.class);
+            resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        // Builds the notification and issues it.
-        ((NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE)).notify((int) n.getId(), mBuilder.build());
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(getContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getContext())
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setContentTitle(n.getTitle())
+                    .setContentText(n.getMessage())
+                    .setContentIntent(resultPendingIntent)
+                    .setAutoCancel(true)
+                    .setVibrate(vibrate)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+
+            // Builds the notification and issues it.
+            ((NotificationManager) getContext().getSystemService(getContext().NOTIFICATION_SERVICE)).notify((int) n.getId(), mBuilder.build());
+
+        }
     }
 
     @Override
