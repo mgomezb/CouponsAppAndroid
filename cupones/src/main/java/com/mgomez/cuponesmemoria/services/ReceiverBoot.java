@@ -40,8 +40,8 @@ public class ReceiverBoot extends BroadcastReceiver implements GooglePlayService
             locationClient.connect();
         }
 
-        Intent intentGetCoupons = new Intent();
-        intentGetCoupons.setAction("cl.acid.aim.coupons.services.GetCouponService");
+        Intent intentGetCoupons = new Intent("com.mgomez.cuponesmemoria.services.GetCouponService");
+        intentGetCoupons.setClass(context, GetCouponService.class);
         context.startService(intentGetCoupons);
 
     }

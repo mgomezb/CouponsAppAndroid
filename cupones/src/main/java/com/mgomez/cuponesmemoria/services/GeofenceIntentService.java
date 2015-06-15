@@ -27,7 +27,6 @@ public class GeofenceIntentService extends IntentService {
 
     public GeofenceIntentService() {
         super(TRANSITION_INTENT_SERVICE);
-        configuration = ((CouponApplication) getApplication()).getConfiguration();
     }
 
     @Override
@@ -35,7 +34,7 @@ public class GeofenceIntentService extends IntentService {
         if (LocationClient.hasError(intent)) {
             //todo error process
         } else {
-
+            configuration = ((CouponApplication) getApplication()).getConfiguration();
             Intent beaconIntent = new Intent(this, BeaconService.class);
 
             int transitionType = LocationClient.getGeofenceTransition(intent);
