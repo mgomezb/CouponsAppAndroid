@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,8 @@ import com.mgomez.cuponesmemoria.connectors.CouponConnector;
 import com.mgomez.cuponesmemoria.model.UserCoupon;
 import com.mgomez.cuponesmemoria.utilities.Configuration;
 import com.mgomez.cuponesmemoria.utilities.NotificationHub;
+import com.mgomez.cuponesmemoria.views.FloatLabeledEditText;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +31,7 @@ import org.json.JSONObject;
  */
 public class Login extends Activity {
 
-    EditText email, password;
+    FloatLabeledEditText email, password;
     Configuration configuration;
     Button loginButton, registerButton;
     CouponConnector couponConnector;
@@ -37,7 +40,11 @@ public class Login extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActionBar().hide();
         setContentView(R.layout.login);
+
+
+
         configuration = ((CouponApplication) getApplication()).getConfiguration();
         couponConnector = ((CouponApplication) getApplication()).getCouponConnector();
         notificationHub = ((CouponApplication) getApplication()).getNotificationHub();
@@ -54,8 +61,13 @@ public class Login extends Activity {
     private void setViews() {
         loginButton = (Button) findViewById(R.id.sign_in);
         registerButton = (Button) findViewById(R.id.register);
-        email = (EditText) findViewById(R.id.user);
-        password = (EditText) findViewById(R.id.password);
+        email = (FloatLabeledEditText) findViewById(R.id.user);
+        password = (FloatLabeledEditText) findViewById(R.id.password);
+
+        email.setSingleLine(true);
+        email.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        password.setSingleLine(true);
+        password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

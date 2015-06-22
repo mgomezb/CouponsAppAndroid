@@ -14,8 +14,11 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
+import com.mgomez.cuponesmemoria.Constants;
+import com.mgomez.cuponesmemoria.CouponApplication;
 import com.mgomez.cuponesmemoria.R;
 import com.mgomez.cuponesmemoria.fragments.TutorialFragment;
+import com.mgomez.cuponesmemoria.utilities.Configuration;
 import com.viewpagerindicator.CirclePageIndicator;
 
 /**
@@ -77,17 +80,28 @@ public class Tutorial extends Activity {
     }
 
     Button button;
+    Configuration configuration;
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.tutorial_view);
 
         Bundle b = getIntent().getExtras();
 
+        configuration = ((CouponApplication) getApplication()).getConfiguration();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setIcon(R.drawable.logoback_normal);
+        if(b == null && configuration.getProperty(this, Constants.TUTORIAL_SEEN, false)){
+            startActivity(new Intent(this, Login.class));
+            finish();
+        }
+        else {
+            configuration.setProperty(this, Constants.TUTORIAL_SEEN, true);
+        }
+
+        getActionBar().hide();
+        setContentView(R.layout.tutorial_view);
+
+
 
         FragmentPagerAdapter adapter = new TutorialPagerAdapter(getFragmentManager());
 
@@ -95,8 +109,10 @@ public class Tutorial extends Activity {
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(exit);
 
-        if(b.containsKey("config"))
+        if(b!= null && b.containsKey("config")){
+            getActionBar().setDisplayHomeAsUpEnabled(true);
             button.setVisibility(View.GONE);
+        }
 
         pager.setAdapter(adapter);
 
@@ -109,7 +125,7 @@ public class Tutorial extends Activity {
     private View.OnClickListener exit = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            startActivity(new Intent(Tutorial.this, Register.class));
+            startActivity(new Intent(Tutorial.this, Login.class));
             finish();
         }
     };

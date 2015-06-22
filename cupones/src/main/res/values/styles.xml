@@ -5,9 +5,6 @@
         <item name="switchStyle">@style/Widget.Holo.CompoundButton.Switch</item>
     </style>
 
-    <style name="AppThemeNoTitle" parent="android:style/android:Theme.NoTitleBar">
-    </style>
-
     <style name="dialog_button">
         <item name="android:layout_width">130dp</item>
         <item name="android:layout_height">wrap_content</item>

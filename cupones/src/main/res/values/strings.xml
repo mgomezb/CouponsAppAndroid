@@ -70,7 +70,7 @@
 
     <string name="sign_in">INGRESAR</string>
 
-    <string name="register_login">Registar</string>
+    <string name="register_login">¿No te has regitrado?\nRegistrate aquí.</string>
     <string name="email">E-mail</string>
     <string name="password">Contraseña</string>
 

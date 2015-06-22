@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/background_login">
+    android:background="@color/background_login"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -26,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mall Curicó"
+            android:text="Mall Test"
             android:id="@+id/textView4"
             android:textSize="25dp"
             android:textStyle="bold"
@@ -47,23 +48,21 @@
         android:background="@color/white">
 
 
-        <EditText
+        <com.mgomez.cuponesmemoria.views.FloatLabeledEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
             android:id="@+id/user"
-            android:hint="@string/email"
             android:layout_margin="10dp"
+            app:floatingHint="@string/email"
+            android:lines="1"
             android:layout_gravity="center_horizontal" />
 
-        <EditText
+        <com.mgomez.cuponesmemoria.views.FloatLabeledEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
             android:id="@+id/password"
-            android:hint="@string/password"
+            app:floatingHint="@string/password"
+            android:lines="1"
             android:layout_margin="10dp"
             android:layout_gravity="center_horizontal" />
 
